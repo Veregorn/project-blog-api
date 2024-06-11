@@ -3,15 +3,29 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const mongoose = require('mongoose'); // Import mongoose
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
 const app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+// Load the environment variables
+require('dotenv').config();
+
+// Set up default mongoose connection
+mongoose.set('strictQuery', false);
+const dbUser = process.env.DB_USER;
+const dbPassword = process.env.DB_PASSWORD;
+const dbName = process.env.DB_NAME;
+const dbHost = process.env.DB_HOST;
+const dbURI = `mongodb+srv://${dbUser}:${dbPassword}@${dbHost}/${dbName}?retryWrites=true&w=majority&appName=myAtlasClusterEDU`;
+
+main().catch(err => console.error(err));
+async function main() {
+  await mongoose.connect(dbURI);
+  console.log("Connected to MongoDB");
+}
 
 app.use(logger('dev'));
 app.use(express.json());
