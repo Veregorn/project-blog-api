@@ -13,28 +13,27 @@ router.get('/', function(req, res, next) {
 });
 
 // Auth routes
-router.post('/auth/login', authController.login);
-router.post('/auth/register', authController.register);
+//router.post('/auth/login', authController.login);
+//router.post('/auth/register', authController.register);
 
 // Post routes
 router.get('/posts', postController.getAllPosts);
-router.get('/posts/:id', postController.getPost);
+router.get('/posts/:id', postController.getPostById);
 router.post('/posts', postController.createPost);
 router.put('/posts/:id', postController.updatePost);
 router.delete('/posts/:id', postController.deletePost);
 
 // Comment routes
-router.get('/comments', commentController.getAllComments);
-router.get('/comments/:id', commentController.getComment);
-router.post('/comments', commentController.createComment);
-router.put('/comments/:id', commentController.updateComment);
-router.delete('/comments/:id', commentController.deleteComment);
+//router.get('/posts/:postId/comments', commentController.getAllComments);
+//router.get('/posts/:postId/comments/:id', commentController.getCommentById);
+//router.post('/posts/:postId/comments', commentController.createComment);
+//router.put('/posts/:postId/comments/:id', commentController.updateComment);
+//router.delete('/posts/:postId/comments/:id', commentController.deleteComment);
 
 // User routes
-router.get('/users', userController.getAllUsers);
-router.get('/users/:id', userController.getUser);
-router.post('/users', userController.createUser);
-router.put('/users/:id', userController.updateUser);
-router.delete('/users/:id', userController.deleteUser);
+//router.get('/users', userController.getAllUsers);
+//router.get('/users/:id', userController.getUserById);
+//router.put('/users/:id', userController.updateUser);
+//router.delete('/users/:id', userController.deleteUser);
 
 module.exports = router;
