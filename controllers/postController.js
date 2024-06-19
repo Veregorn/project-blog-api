@@ -11,7 +11,7 @@ const { body, validationResult } = require('express-validator');
 // Import mongoose
 const mongoose = require('mongoose');
 
-// Display list of all posts
+// Respond with a json list of all posts
 exports.getAllPosts = asyncHandler(async (req, res, next) => {
     // Get all posts
     const posts = await Post.find()
@@ -28,28 +28,52 @@ exports.getAllPosts = asyncHandler(async (req, res, next) => {
     res.json(posts);
 });
 
-// Display detail page for a specific post
+// Respond with a json object of a specific post
 exports.getPostById = asyncHandler(async (req, res, next) => {
-    const post = await Post.findById(req.params.id).populate('author');
+    try {
+        const post = await Post.findById(req.params.id).populate('author');
 
-    if (post == null) {
-        const error = new Error('Post not found');
-        error.status = 404;
-        next(error);
+        if (post == null) {
+            const error = new Error();
+            error.message = 'Post not found';
+            error.status = 404;
+            next(error);
+        } else {
+            res.json(post);
+        }
+    } catch (err) {
+        next(err);
     }
-
-    res.json(post);
 });
 
 // Handle post create on POST
 exports.createPost = [
     // Validate and sanitize fields')
-    body('title', 'Title must not be empty and must not have more than 100 characters.').trim().isLength({ min: 1, max: 100 }).escape(),
-    body('content', 'Content must not be empty.').trim().isLength({ min: 1 }).escape(),
-    body('image_url').optional({ checkFalsy: true }).trim().escape(),
-    body('published', 'Published must not be empty.').trim().isLength({ min: 1 }).escape(),
-    body('created_at', 'Created at must not be empty.').trim().isLength({ min: 1 }).default(Date.now).escape(),
-    body('author', 'Author must not be empty.').trim().isLength({ min: 1 }).escape(),
+    body('title', 'Title must not be empty and must not have more than 100 characters.')
+        .trim()
+        .isLength({ min: 1, max: 100 })
+        .escape(),
+    body('content', 'Content must not be empty.')
+        .trim()
+        .isLength({ min: 1 })
+        .escape(),
+    body('image_url')
+        .optional({ checkFalsy: true })
+        .trim()
+        .escape(),
+    body('published', 'Published must not be empty.')
+        .trim()
+        .isLength({ min: 1 })
+        .escape(),
+    body('created_at', 'Created at must not be empty.')
+        .trim()
+        .isLength({ min: 1 })
+        .default(Date.now)
+        .escape(),
+    body('author', 'Author must not be empty.')
+        .trim()
+        .isLength({ min: 1 })
+        .escape(),
 
     // Process request after validation and sanitization
     asyncHandler(async (req, res, next) => {
@@ -83,12 +107,31 @@ exports.createPost = [
 // Handle post update on PUT
 exports.updatePost = [
     // Validate and sanitize fields')
-    body('title', 'Title must not be empty and must not have more than 100 characters.').trim().isLength({ min: 1, max: 100 }).escape(),
-    body('content', 'Content must not be empty.').trim().isLength({ min: 1 }).escape(),
-    body('image_url').optional({ checkFalsy: true }).trim().escape(),
-    body('published', 'Published must not be empty.').trim().isLength({ min: 1 }).escape(),
-    body('created_at', 'Created at must not be empty.').trim().isLength({ min: 1 }).default(Date.now).escape(),
-    body('author', 'Author must not be empty.').trim().isLength({ min: 1 }).escape(),
+    body('title', 'Title must not be empty and must not have more than 100 characters.')
+        .trim()
+        .isLength({ min: 1, max: 100 })
+        .escape(),
+    body('content', 'Content must not be empty.')
+        .trim()
+        .isLength({ min: 1 })
+        .escape(),
+    body('image_url')
+        .optional({ checkFalsy: true })
+        .trim()
+        .escape(),
+    body('published', 'Published must not be empty.')
+        .trim()
+        .isLength({ min: 1 })
+        .escape(),
+    body('created_at', 'Created at must not be empty.')
+        .trim()
+        .isLength({ min: 1 })
+        .default(Date.now)
+        .escape(),
+    body('author', 'Author must not be empty.')
+        .trim()
+        .isLength({ min: 1 })
+        .escape(),
 
     // Process request after validation and sanitization
     asyncHandler(async (req, res, next) => {
@@ -108,7 +151,7 @@ exports.updatePost = [
 
         // Check for errors
         if (!errors.isEmpty()) {
-            // There are errors. Render form again with sanitized values/error messages
+            // There are errors. Respond with sanitized values/error messages
             res.json({ post: post, errors: errors.array() });
             return;
         } else {
