@@ -10,17 +10,16 @@ const { body, validationResult } = require('express-validator');
 // Import mongoose
 const mongoose = require('mongoose');
 
-// Display list of all users
+// REspond with a list of all users
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
     // Get all users
     const users = await User.find()
         .sort({ name: 1 });
 
     // Check for errors
-    if (users == null) {
-        const error = new Error('Users not found');
-        error.status = 404;
-        next(error);
+    if (users.length === 0) {
+        res.status(404).json({ error: 'Users not found' });
+        return;
     }
 
     res.json(users);

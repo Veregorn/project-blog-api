@@ -24,11 +24,11 @@ router.put('/posts/:id', postController.updatePost);
 router.delete('/posts/:id', postController.deletePost);
 
 // Comment routes
-//router.get('/posts/:postId/comments', commentController.getAllComments);
-//router.get('/posts/:postId/comments/:id', commentController.getCommentById);
-//router.post('/posts/:postId/comments', commentController.createComment);
-//router.put('/posts/:postId/comments/:id', commentController.updateComment);
-//router.delete('/posts/:postId/comments/:id', commentController.deleteComment);
+router.get('/posts/:postId/comments', commentController.getAllCommentsInPost);
+router.get('/posts/:postId/comments/:id', commentController.getCommentById);
+router.post('/posts/:postId/comments', commentController.createComment);
+router.put('/posts/:postId/comments/:id', commentController.updateComment);
+router.delete('/posts/:postId/comments/:id', commentController.deleteComment);
 
 // User routes
 router.get('/users', userController.getAllUsers);

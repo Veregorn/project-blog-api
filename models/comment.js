@@ -4,7 +4,9 @@ const user = require('./user');
 const commentSchema = new mongoose.Schema({
     content: {
         type: String,
-        required: true
+        required: true,
+        min: 1,
+        max: 500
     },
     post: {
         type: mongoose.Schema.Types.ObjectId,

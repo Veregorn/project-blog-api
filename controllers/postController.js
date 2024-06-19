@@ -19,10 +19,9 @@ exports.getAllPosts = asyncHandler(async (req, res, next) => {
         .populate('author');
 
     // Check for errors
-    if (posts == null) {
-        const error = new Error('Posts not found');
-        error.status = 404;
-        next(error);
+    if (posts.length === 0) {
+        res.status(404).json({ error: 'Posts not found' });
+        return;
     }
 
     res.json(posts);
