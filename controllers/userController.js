@@ -10,7 +10,10 @@ const { body, validationResult } = require('express-validator');
 // Import mongoose
 const mongoose = require('mongoose');
 
-// REspond with a list of all users
+// Import bcrypt
+const bcrypt = require('bcryptjs');
+
+// Respond with a list of all users
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
     // Get all users
     const users = await User.find()
@@ -89,11 +92,17 @@ exports.createUser = [
             return;
         }
 
+        // Encrypt the password
+        const salt = await bcrypt.genSalt(10);
+
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
         // Create a new user
         const user = new User({
             name: req.body.name,
             email: req.body.email,
-            password: req.body.password,
+            password: hashedPassword,
             type: req.body.type
         });
 

@@ -11,7 +11,6 @@ const { body, validationResult, check } = require('express-validator');
 
 // Import mongoose
 const mongoose = require('mongoose');
-const { param } = require('../routes');
 
 // Respond with a list of all comments for a specific post
 exports.getAllCommentsInPost = asyncHandler(async (req, res, next) => {

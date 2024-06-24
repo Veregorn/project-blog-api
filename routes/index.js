@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 
 // Import the controllers
 const postController = require('../controllers/postController');
@@ -13,8 +14,7 @@ router.get('/', function(req, res, next) {
 });
 
 // Auth routes
-//router.post('/auth/login', authController.login);
-//router.post('/auth/register', authController.register);
+router.post('/auth/login', authController.login);
 
 // Post routes
 router.get('/posts', postController.getAllPosts);
