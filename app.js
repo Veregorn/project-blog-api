@@ -11,6 +11,9 @@ const passport = require('passport');
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 
+// Import the User model
+const User = require('./models/user');
+
 // Load the environment variables
 require('dotenv').config();
 
@@ -32,7 +35,6 @@ passport.use(new JwtStrategy(jwtOptions, async (jwt_payload, done) => {
   } catch (err) {
     return done(err, false);
   }
-  
 }));
 
 const router = require('./routes/index');

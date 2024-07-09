@@ -66,18 +66,19 @@ exports.createPost = [
         .escape(),
     body('created_at', 'Created at must not be empty.')
         .trim()
-        .isLength({ min: 1 })
-        .default(Date.now)
-        .escape(),
-    body('author', 'Author must not be empty.')
-        .trim()
-        .isLength({ min: 1 })
+        .default(Date.now())
         .escape(),
 
     // Process request after validation and sanitization
     asyncHandler(async (req, res, next) => {
+
         // Extract the validation errors from a request
         const errors = validationResult(req);
+
+        // Only allow admin users to create posts
+        if (req.user.type !== 'admin') {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
 
         // Create a post object with escaped and trimmed data
         const post = new Post({
@@ -86,7 +87,7 @@ exports.createPost = [
             image_url: req.body.image_url,
             published: req.body.published,
             created_at: req.body.created_at,
-            author: req.body.author,
+            author: req.user._id, // req.user is set in the auth middleware
         });
 
         // Check for errors
@@ -127,15 +128,16 @@ exports.updatePost = [
         .isLength({ min: 1 })
         .default(Date.now)
         .escape(),
-    body('author', 'Author must not be empty.')
-        .trim()
-        .isLength({ min: 1 })
-        .escape(),
 
     // Process request after validation and sanitization
     asyncHandler(async (req, res, next) => {
         // Extract the validation errors from a request
         const errors = validationResult(req);
+
+        // Only allow admin users to create posts
+        if (req.user.type !== 'admin') {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
 
         // Create a post object with escaped and trimmed data
         const post = new Post({
@@ -144,7 +146,7 @@ exports.updatePost = [
             image_url: req.body.image_url,
             published: req.body.published,
             created_at: req.body.created_at,
-            author: req.body.author,
+            author: req.user._id, // req.user is set in the auth middleware
             _id: req.params.id,
         });
 
@@ -166,6 +168,11 @@ exports.updatePost = [
 exports.deletePost = asyncHandler(async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
         return res.status(400).json({ error: 'Invalid ID format' });
+    }
+
+    // Only allow admin users to create posts
+    if (req.user.type !== 'admin') {
+        return res.status(401).json({ error: 'Unauthorized' });
     }
 
     try {
