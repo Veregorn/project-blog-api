@@ -1,0 +1,41 @@
+footer {
+    width: 100%;
+    background-color: #fff;
+    color: #000;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    box-sizing: border-box;
+    gap: 3rem;
+    height: 10vh;
+}
+
+footer h3 {
+    font-family: 'Open Sans 400 Normal', sans-serif;
+    font-size: 1rem;
+    text-align: center;
+    line-height: 1.5;
+}
+
+#contact-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+}
+
+#image-container {
+    width: 40px;
+    height: 40px;
+}
+
+.github-icon {
+    transition: transform 0.5s ease-in-out;
+}
+
+.github-icon:hover {
+    transform: rotate(180deg);
+}

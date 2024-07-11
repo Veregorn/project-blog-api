@@ -1,0 +1,33 @@
+header {
+    background-color: #fff;
+    color: #000;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 2rem;
+    box-sizing: border-box;
+    height: 10vh;
+    align-items: center;   
+}
+
+.title {
+    text-decoration: none;
+    color: #000;
+}
+
+#nav-container {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    box-sizing: border-box;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #000;
+}
+
+.nav-link:hover {
+    color: darkslategray;
+}
