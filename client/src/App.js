@@ -11,26 +11,23 @@ import PostDetail from './components/PostDetail';
 function App() {
   // We need to save the save the state about the user being logged in or not
   // We can do this by using the useState hook
-  // We will create a new state variable called loggedIn
-  // The initial value of loggedIn will be false
-  // We will also create two functions handleLogin and handleLogout
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [user, setUser] = React.useState({ isLoggedIn: false, name: '' });
 
-  function handleLogin() {
-    setLoggedIn(true);
+  function handleLogin(name) {
+    setUser({ isLoggedIn: true, name: name });
   }
 
   function handleLogout() {
     localStorage.removeItem('token'); // Remove the token from localStorage
-    setLoggedIn(false);
+    setUser({ isLoggedIn: false, name: '' });
   }
 
   return (
     <Router>
       <div className="App">
-        <Header loggedIn={loggedIn} handleLogin={handleLogin} handleLogout={handleLogout} />
+        <Header user={user} handleLogout={handleLogout} />
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login handleLogin={handleLogin} />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/" element={<Home />} />
           <Route path="/post/:id" element={<PostDetail />} />

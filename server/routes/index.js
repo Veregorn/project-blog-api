@@ -35,7 +35,7 @@ router.delete('/posts/:postId/comments/:id', passport.authenticate('jwt', { sess
 // User routes
 router.get('/users', userController.getAllUsers);
 router.get('/users/:id', userController.getUserById);
-router.post('/users', passport.authenticate('jwt', { session: false }), userController.createUser);
+router.post('/users', userController.createUser);
 router.put('/users/:id', passport.authenticate('jwt', { session: false }), userController.updateUser);
 router.delete('/users/:id', passport.authenticate('jwt', { session: false }), userController.deleteUser);
 

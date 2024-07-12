@@ -21,13 +21,20 @@ header {
     flex-direction: row;
     gap: 2rem;
     box-sizing: border-box;
+    align-items: center;
 }
 
-.nav-link {
+.navbar-elem {
     text-decoration: none;
     color: #000;
+    font-size: 1.5rem;
 }
 
-.nav-link:hover {
-    color: darkslategray;
+.navbar-elem:hover {
+    text-decoration: underline;
+}
+
+.welcome-message {
+    font-size: 1.2rem;
+    color: #61dafb;
 }
