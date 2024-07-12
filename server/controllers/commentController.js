@@ -21,10 +21,10 @@ exports.getAllCommentsInPost = asyncHandler(async (req, res, next) => {
         .populate('post');
 
     // Check for errors
-    if (comments.length === 0) {
+    /* if (comments.length === 0) {
         res.status(404).json({ error: 'Comments not found' });
         return;
-    }
+    } */
 
     res.json(comments);
 });

@@ -6,6 +6,7 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import PostDetail from './components/PostDetail';
 
 function App() {
   // We need to save the save the state about the user being logged in or not
@@ -32,6 +33,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/" element={<Home />} />
+          <Route path="/post/:id" element={<PostDetail />} />
         </Routes>
         <Footer />
       </div>
