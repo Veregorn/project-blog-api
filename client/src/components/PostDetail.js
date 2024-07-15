@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../services/api';
+import '../styles/PostDetail.css';
 
-function PostDetail() {
+function PostDetail({ user }) {
     const { id } = useParams();
     const [post, setPost] = useState({});
     const [comments, setComments] = useState([]);
+    const [commentContent, setCommentContent] = useState('');
 
     useEffect(() => {
         async function loadPost() {
@@ -35,6 +37,18 @@ function PostDetail() {
         loadComments();
     }, [id]);
 
+    async function handleSubmit(event) {
+        event.preventDefault();
+        try {
+            await api.post(`/api/posts/${id}/comments`, { content: commentContent, user: user.id});
+            const response = await api.get(`/api/posts/${id}/comments`);
+            setComments(response.data);
+            setCommentContent('');
+        } catch (error) {
+            console.log('Error posting comment', error);
+        }
+    }
+
     if (!post.title) {
         return (
             <div className='main'>
@@ -49,6 +63,19 @@ function PostDetail() {
             <p>{post.content}</p>
             {post.author && <p>Author: {post.author.name}</p>}
             {post.createdAt && <p>Created at: {new Date(post.createdAt).toLocaleString()}</p>}
+            {user.isLoggedIn && (
+                <>
+                    <hr />
+                    <form onSubmit={handleSubmit}>
+                        <div className='form-group'>
+                            <label htmlFor='content'>Comment:</label>
+                            <textarea id='content' name='content' value={commentContent} onChange={(e) => setCommentContent(e.target.value)}></textarea>
+                        </div>
+                        <button type='submit'>Post comment</button>
+                    </form>
+                    <hr />
+                </>
+            )}
             {comments.length > 0 ? (
                 <>
                     <h2>Comments</h2>

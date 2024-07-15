@@ -1,5 +1,7 @@
 .main {
     height: 80vh;
+    overflow-y: auto;
+    width: 100%;
 }
 
 .post-title-container {

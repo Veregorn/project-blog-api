@@ -5,10 +5,10 @@
 label {
   font-size: 1.2rem;
   font-weight: 500;
+  margin-bottom: 1rem;
 }
 
 input {
-  width: 100%;
   padding: 0.5rem;
   font-size: 1rem;
   border: 1px solid #000;

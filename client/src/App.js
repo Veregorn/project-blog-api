@@ -7,14 +7,19 @@ import Signup from './components/Signup';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import PostDetail from './components/PostDetail';
+import api from './services/api';
 
 function App() {
   // We need to save the save the state about the user being logged in or not
   // We can do this by using the useState hook
-  const [user, setUser] = React.useState({ isLoggedIn: false, name: '' });
+  const [user, setUser] = React.useState({ isLoggedIn: false, name: '', id: '' });
 
   function handleLogin(name) {
-    setUser({ isLoggedIn: true, name: name });
+    // Take user id from the database
+    api.get('/api/users').then((response) => {
+      const user = response.data.find((user) => user.name === name);
+      setUser({ isLoggedIn: true, name: name, id: user._id });
+    });
   }
 
   function handleLogout() {
@@ -30,7 +35,7 @@ function App() {
           <Route path="/login" element={<Login handleLogin={handleLogin} />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/" element={<Home />} />
-          <Route path="/post/:id" element={<PostDetail />} />
+          <Route path="/post/:id" element={<PostDetail user={user} />} />
         </Routes>
         <Footer />
       </div>
