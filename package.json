@@ -2,12 +2,15 @@
     "name": "my-app",
     "version": "1.0.0",
     "scripts": {
-      "start": "concurrently \"npm run server\" \"npm run client\"",
-      "server": "npm run serverstart --prefix server",
-      "client": "npm start --prefix client",
-      "server-dev": "npm run devstart --prefix server"
+        "start": "concurrently \"npm run server\" \"npm run client\"",
+        "server": "npm run serverstart --prefix server",
+        "client": "npm start --prefix client",
+        "server-dev": "npm run devstart --prefix server"
     },
     "devDependencies": {
-      "concurrently": "^6.0.0"
+        "concurrently": "^6.5.1"
+    },
+    "dependencies": {
+        "dotenv": "^16.4.5"
     }
-}  
+}

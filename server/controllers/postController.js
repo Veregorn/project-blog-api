@@ -123,11 +123,6 @@ exports.updatePost = [
         .trim()
         .isLength({ min: 1 })
         .escape(),
-    body('created_at', 'Created at must not be empty.')
-        .trim()
-        .isLength({ min: 1 })
-        .default(Date.now)
-        .escape(),
 
     // Process request after validation and sanitization
     asyncHandler(async (req, res, next) => {
@@ -145,7 +140,7 @@ exports.updatePost = [
             content: req.body.content,
             image_url: req.body.image_url,
             published: req.body.published,
-            created_at: req.body.created_at,
+            created_at: Date.now(),
             author: req.user._id, // req.user is set in the auth middleware
             _id: req.params.id,
         });

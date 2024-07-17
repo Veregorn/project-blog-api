@@ -35,6 +35,23 @@ header {
 }
 
 .welcome-message {
-    font-size: 1.2rem;
-    color: #61dafb;
+    font-size: 1rem;
+    color: #000;
+}
+
+.header-button {
+    background-color: #61dafb;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.header-button:hover {
+    opacity: 0.8;
+    color: #fff;
 }

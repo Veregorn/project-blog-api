@@ -11,6 +11,8 @@ function Header({ user, handleLogout }) {
                 {user.isLoggedIn ? (
                     <>
                         <p className='welcome-message'>Welcome {user.name}!</p>
+                        {/* Display a 'New Post' button only if the user is an admin */}
+                        {user.type === 'admin' && <Link to={'/new-post'} className='header-button'>New Post</Link>}
                         <a href='/' onClick={handleLogout} className='navbar-elem'>Log out</a>
                     </>
                 ) : (

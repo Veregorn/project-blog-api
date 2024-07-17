@@ -60,9 +60,11 @@ function PostDetail({ user }) {
     return (
         <div className='main'>
             <h1>{post.title}</h1>
+            {console.log(post.image_url)}
+            {post.image_url && <img src={post.image_url} alt={post.title} />}
             <p>{post.content}</p>
             {post.author && <p>Author: {post.author.name}</p>}
-            {post.createdAt && <p>Created at: {new Date(post.createdAt).toLocaleString()}</p>}
+            {post.created_at && <p>Created at: {new Date(post.created_at).toLocaleString()}</p>}
             {user.isLoggedIn && (
                 <>
                     <hr />
@@ -82,8 +84,8 @@ function PostDetail({ user }) {
                     {comments.map((comment) => (
                         <div key={comment._id}>
                             <p>{comment.content}</p>
-                            {comment.author && <p>Author: {comment.author.name}</p>}
-                            {comment.createdAt && <p>Created at: {new Date(comment.createdAt).toLocaleString()}</p>}
+                            {comment.user && <p>Author: {comment.user.name}</p>}
+                            {comment.timestamp && <p>Created at: {new Date(comment.timestamp).toLocaleString()}</p>}
                         </div>
                     ))}
                 </>

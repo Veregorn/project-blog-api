@@ -7,6 +7,7 @@ import Signup from './components/Signup';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import PostDetail from './components/PostDetail';
+import NewPost from './components/NewPost';
 import api from './services/api';
 
 function App() {
@@ -18,7 +19,7 @@ function App() {
     // Take user id from the database
     api.get('/api/users').then((response) => {
       const user = response.data.find((user) => user.name === name);
-      setUser({ isLoggedIn: true, name: name, id: user._id });
+      setUser({ isLoggedIn: true, name: name, id: user._id, type: user.type });
     });
   }
 
@@ -36,6 +37,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/" element={<Home />} />
           <Route path="/post/:id" element={<PostDetail user={user} />} />
+          <Route path="/new-post" element={<NewPost />} />
         </Routes>
         <Footer />
       </div>
