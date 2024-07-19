@@ -3,24 +3,10 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
-require('dotenv').config();
-const cloudinary = require('cloudinary').v2;
-
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
-console.log('API_KEY:', process.env.CLOUDINARY_API_KEY);
-console.log('API_SECRET:', process.env.CLOUDINARY_API_SECRET);
-console.log('CLOUD_NAME:', process.env.CLOUDINARY_CLOUD_NAME);
-
-console.log('TESTING_ENV_VARIABLE: ', process.env.TESTING_ENV_VARIABLE);
-
 // Function to decode the image URL
 function decodeImageURL(imageURL) {
     const entities = {
+        '&%23x2F;': '/',
         '&#x2F;': '/',
         '&amp;': '&',
         '&lt;': '<',
@@ -28,7 +14,7 @@ function decodeImageURL(imageURL) {
         '&quot;': '"',
         '&#39;': "'"
     };
-    return imageURL.replace(/&#x2F;|&amp;|&lt;|&gt;|&quot;|&#39;/g, function (match) {
+    return imageURL.replace(/&%23x2F;|&#x2F;|&amp;|&lt;|&gt;|&quot;|&#39;/g, function (match) {
         return entities[match];
     });
 };
@@ -37,7 +23,7 @@ function NewPost() {
     const navigate = useNavigate();
     const [title, setTitle] = React.useState('');
     const [content, setContent] = React.useState('');
-    const [image_url, setImageUrl] = React.useState('');
+    const [imageFile, setImageFile] = React.useState(null);
     const [published, setPublished] = React.useState(false);
     const [error, setError] = React.useState('');
 
@@ -45,18 +31,25 @@ function NewPost() {
         event.preventDefault();
 
         try {
+            let image_url = '';
+
             // If the image URL is not empty, decode the URL and upload the image to Cloudinary
-            if (image_url !== '') {
-                const decodedImgURL = decodeImageURL(image_url);
-                await cloudinary.uploader.upload(decodedImgURL, function (error, result) {
-                    if (error) {
-                        console.log('Error uploading image to Cloudinary', error);
-                        setError('Error uploading image to Cloudinary. Please try again.');
-                    } else {
-                        setImageUrl(cloudinary.url(decodedImgURL));
-                    }
+            if (imageFile) {
+                const formData = new FormData();
+                formData.append('file', imageFile);
+                formData.append('upload_preset', process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET); // Reemplaza 'your_upload_preset' con tu preset de subida
+
+                const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`, {
+                    method: 'POST',
+                    body: formData
                 });
+
+                const data = await response.json();
+                console.log('data', data);
+                image_url = decodeImageURL(data.secure_url);
+                console.log('image_url', image_url);
             }
+
             // Create the post
             await api.post('/api/posts', { 
                 title, 
@@ -64,6 +57,7 @@ function NewPost() {
                 image_url, 
                 published
             });
+
             // Redirect the user to the home page
             navigate('/');
         } catch (error) {
@@ -99,10 +93,9 @@ function NewPost() {
                     <label htmlFor='image_url'>Image URL:</label>
                     <input
                         type='file'
-                        id='image_url' 
-                        name='image_url' 
-                        value={image_url} 
-                        onChange={(e) => setImageUrl(e.target.value)}
+                        id='image_url'
+                        name='image_url'
+                        onChange={(e) => setImageFile(e.target.files[0])}
                     />
                 </div>
                 <div className='form-group'>
@@ -115,9 +108,9 @@ function NewPost() {
                         onChange={(e) => setPublished(e.target.checked)}
                     />
                 </div>
-                <button type='submit'>Create post</button>
+                {error && <p className='error'>{error}</p>}
+                <button type='submit'>Create Post</button>
             </form>
-            {error && <p className='error'>{error}</p>}
         </div>
     );
 }

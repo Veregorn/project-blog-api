@@ -2,8 +2,26 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../services/api';
 import '../styles/PostDetail.css';
+import { useNavigate } from 'react-router-dom';
+
+// Function to decode the image URL
+function decodeImageURL(imageURL) {
+    const entities = {
+        '&%23x2F;': '/',
+        '&#x2F;': '/',
+        '&amp;': '&',
+        '&lt;': '<',
+        '&gt;': '>',
+        '&quot;': '"',
+        '&#39;': "'"
+    };
+    return imageURL.replace(/&%23x2F;|&#x2F;|&amp;|&lt;|&gt;|&quot;|&#39;/g, function (match) {
+        return entities[match];
+    });
+};
 
 function PostDetail({ user }) {
+    const navigate = useNavigate();
     const { id } = useParams();
     const [post, setPost] = useState({});
     const [comments, setComments] = useState([]);
@@ -57,14 +75,25 @@ function PostDetail({ user }) {
         );
     }
 
+    async function handleDeletePost() {
+        try {
+            await api.delete(`/api/posts/${id}`);
+            // Redirect the user to the home page
+            navigate('/');
+        } catch (error) {
+            console.log('Error deleting post', error);
+        }
+    }
+
     return (
         <div className='main'>
             <h1>{post.title}</h1>
-            {console.log(post.image_url)}
-            {post.image_url && <img src={post.image_url} alt={post.title} />}
+            {post.image_url && <img src={decodeImageURL(post.image_url)} alt={post.title} />}
             <p>{post.content}</p>
             {post.author && <p>Author: {post.author.name}</p>}
             {post.created_at && <p>Created at: {new Date(post.created_at).toLocaleString()}</p>}
+            {/* Show a 'Delete post' button only if the user is an admin */}
+            {user.isLoggedIn && user.type === 'admin' && <button onClick={handleDeletePost}>Delete post</button>}
             {user.isLoggedIn && (
                 <>
                     <hr />
