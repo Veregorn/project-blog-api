@@ -27,7 +27,7 @@ function NewPost() {
     const [published, setPublished] = React.useState(false);
     const [error, setError] = React.useState('');
 
-    async function handleSubmit(event) {
+    async function handleCreatePost(event) {
         event.preventDefault();
 
         try {
@@ -45,9 +45,7 @@ function NewPost() {
                 });
 
                 const data = await response.json();
-                console.log('data', data);
                 image_url = decodeImageURL(data.secure_url);
-                console.log('image_url', image_url);
             }
 
             // Create the post
@@ -69,7 +67,7 @@ function NewPost() {
     return (
         <div className='main'>
             <h2>New post</h2>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleCreatePost}>
                 <div className='form-group'>
                     <label htmlFor='title'>Title:</label>
                     <input

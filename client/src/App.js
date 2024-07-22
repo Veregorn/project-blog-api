@@ -35,7 +35,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login handleLogin={handleLogin} />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home user={user} />} />
           <Route path="/post/:id" element={<PostDetail user={user} />} />
           <Route path="/new-post" element={<NewPost />} />
         </Routes>

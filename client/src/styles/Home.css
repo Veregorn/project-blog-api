@@ -6,11 +6,12 @@
 
 .post-title-container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content:first baseline;
     gap: 1rem;
     margin-top: 2rem;
+    padding-left: 2rem;
 }
 
 .main a {
@@ -20,4 +21,9 @@
 
 .main a:hover {
     text-decoration: underline;
+}
+
+.unpublished {
+    color: red;
+    font-size: 0.8rem;
 }

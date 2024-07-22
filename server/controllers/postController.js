@@ -11,6 +11,22 @@ const { body, validationResult } = require('express-validator');
 // Import mongoose
 const mongoose = require('mongoose');
 
+// Respond with a json list of all published posts
+exports.getPublishedPosts = asyncHandler(async (req, res, next) => {
+    // Get all published posts
+    const posts = await Post.find({ published: true })
+        .sort({ created_at: -1 })
+        .populate('author');
+
+    // Check for errors
+    if (posts.length === 0) {
+        res.status(404).json({ error: 'Posts not found' });
+        return;
+    }
+
+    res.json(posts);
+});
+
 // Respond with a json list of all posts
 exports.getAllPosts = asyncHandler(async (req, res, next) => {
     // Get all posts

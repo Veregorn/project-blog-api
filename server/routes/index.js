@@ -19,6 +19,7 @@ router.get('/', function(req, res, next) {
 router.post('/auth/login', authController.login);
 
 // Post routes
+router.get('/posts/published', postController.getPublishedPosts);
 router.get('/posts', postController.getAllPosts);
 router.get('/posts/:id', postController.getPostById);
 router.post('/posts', passport.authenticate('jwt', { session: false }), postController.createPost);
