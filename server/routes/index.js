@@ -32,6 +32,7 @@ router.get('/posts/:postId/comments/:id', commentController.getCommentById);
 router.post('/posts/:postId/comments', passport.authenticate('jwt', { session: false }), commentController.createComment);
 router.put('/posts/:postId/comments/:id', passport.authenticate('jwt', { session: false }), commentController.updateComment);
 router.delete('/posts/:postId/comments/:id', passport.authenticate('jwt', { session: false }), commentController.deleteComment);
+router.get('/comments/last', commentController.getLastComments);
 
 // User routes
 router.get('/users', userController.getAllUsers);

@@ -29,6 +29,25 @@ exports.getAllCommentsInPost = asyncHandler(async (req, res, next) => {
     res.json(comments);
 });
 
+// Respond with a list of the last 5 comments and the title of the post
+exports.getLastComments = asyncHandler(async (req, res, next) => {
+    try {
+        const comments = await Comment.find()
+            .sort({ timestamp: -1 })
+            .limit(5)
+            .populate('post', 'title');
+
+        if (comments.length === 0) {
+            res.status(404).json({ error: 'Comments not found' });
+            return;
+        }
+
+        res.json(comments);
+    } catch (err) {
+        next(err);
+    }
+});
+
 // Respond with a json object of a specific comment
 exports.getCommentById = asyncHandler(async (req, res, next) => {
     try {

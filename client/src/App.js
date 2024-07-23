@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import PostDetail from './components/PostDetail';
 import NewPost from './components/NewPost';
 import api from './services/api';
+import EditPost from './components/EditPost';
 
 function App() {
   // We need to save the save the state about the user being logged in or not
@@ -38,6 +39,7 @@ function App() {
           <Route path="/" element={<Home user={user} />} />
           <Route path="/post/:id" element={<PostDetail user={user} />} />
           <Route path="/new-post" element={<NewPost />} />
+          <Route path="/edit-post/:id" element={<EditPost />} />
         </Routes>
         <Footer />
       </div>

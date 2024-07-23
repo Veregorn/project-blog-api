@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 function Home({ user }) {
     const [posts, setPosts] = useState([]);
+    const [comments, setComments] = useState([]);
 
     useEffect(() => {
         async function loadPosts() {
@@ -27,7 +28,18 @@ function Home({ user }) {
             }
         }
 
+        // Function that load on the state the 5 last comments of the posts
+        async function loadComments() {
+            try {
+                const response = await api.get('/api/comments/last');
+                setComments(response.data);
+            } catch (error) {
+                console.log('Error loading comments', error);
+            }
+        }
+
         loadPosts();
+        loadComments();
     }, [user]);
 
     if (posts.length === 0) {
@@ -40,12 +52,20 @@ function Home({ user }) {
 
     return (
         <div className='main'>
+            <h2>Posts</h2>
             {posts.map((post) => (
                 <div className='post-title-container' key={post._id}>
                     <Link to={`/post/${post._id}`} className='post-title'>{post.title}</Link>
                     {(user.isLoggedIn && user.type === 'admin' && !post.published) &&
                         <span className='unpublished'>Unpublished</span>
                     }
+                </div>
+            ))}
+            <h2>Last Comments</h2>
+            {comments.map((comment) => (
+                <div className='comment' key={comment._id}>
+                    <p>{comment.content}</p>
+                    <Link to={`/post/${comment.post._id}`}>Post: {comment.post.title}</Link>
                 </div>
             ))}
         </div>

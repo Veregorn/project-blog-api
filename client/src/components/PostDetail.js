@@ -115,10 +115,12 @@ function PostDetail({ user }) {
     return (
         <div className='main'>
             <h1>{post.title}</h1>
-            {post.image_url && <img src={decodeImageURL(post.image_url)} alt={post.title} />}
+            {post.image_url && <img className='post-image' src={decodeImageURL(post.image_url)} alt={post.title} />}
             <p>{post.content}</p>
             {post.author && <p>Author: {post.author.name}</p>}
             {post.created_at && <p>Created at: {new Date(post.created_at).toLocaleString()}</p>}
+            {/* Show a 'Edit post' button only if the user is an admin */}
+            {user.isLoggedIn && user.type === 'admin' && <button onClick={() => navigate(`/edit-post/${id}`)}>Edit post</button>}
             {/* Show a 'Delete post' button only if the user is an admin */}
             {user.isLoggedIn && user.type === 'admin' && <button onClick={handleDeletePost}>Delete post</button>}
             {user.isLoggedIn && (

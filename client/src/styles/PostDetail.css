@@ -19,3 +19,9 @@ textarea {
     width: 50%;
     height: 10rem;
 }
+
+.post-image {
+    width: 20%;
+    height: auto;
+    margin: 1rem 0;
+}
