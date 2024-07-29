@@ -2,6 +2,8 @@ import '../styles/Signup.css'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import Button from '@mui/material/Button';
+import { TextField } from '@mui/material';
 
 function Signup() {
     const [name, setName] = useState('');
@@ -27,37 +29,34 @@ function Signup() {
         <div className='main'>
             <h2>Sign up</h2>
             <form onSubmit={handleSubmit}>
-                <div className='form-group'>
-                    <label htmlFor='name'>Name:</label>
-                    <input
-                        type='text'
-                        id='name'
-                        name='name'
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                </div>
-                <div className='form-group'>
-                    <label htmlFor='email'>Email:</label>
-                    <input
-                        type='email'
-                        id='email'
-                        name='email'
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </div>
-                <div className='form-group'>
-                    <label htmlFor='password'>Password:</label>
-                    <input
-                        type='password'
-                        id='password'
-                        name='password'
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </div>
-                <button type='submit'>Sign up</button>
+                <TextField
+                    label="Name"
+                    variant="outlined"
+                    type='text'
+                    id='name'
+                    name='name'
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                />
+                <TextField
+                    label="Email"
+                    variant="outlined"
+                    type='email'
+                    id='email'
+                    name='email'
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <TextField
+                    label="Password"
+                    variant="outlined"
+                    type='password'
+                    id='password'
+                    name='password'
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <Button variant="contained" type='submit'>Sign up</Button>
             </form>
             {error && <p className='error'>{error}</p>}
         </div>

@@ -34,8 +34,9 @@ exports.getLastComments = asyncHandler(async (req, res, next) => {
     try {
         const comments = await Comment.find()
             .sort({ timestamp: -1 })
-            .limit(5)
-            .populate('post', 'title');
+            .limit(6)
+            .populate('post', 'title')
+            .populate('user', 'name');
 
         if (comments.length === 0) {
             res.status(404).json({ error: 'Comments not found' });

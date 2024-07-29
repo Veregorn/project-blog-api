@@ -2,6 +2,8 @@ import '../styles/Login.css'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import Button from '@mui/material/Button';
+import { TextField } from '@mui/material';
 
 function Login({ handleLogin }) {
     const [name, setName] = useState('');
@@ -27,27 +29,25 @@ function Login({ handleLogin }) {
         <div className='main'>
             <h2>Log in</h2>
             <form onSubmit={handleSubmit}>
-                <div className='form-group'>
-                    <label htmlFor='name'>Name:</label>
-                    <input
-                        type='text'
-                        id='name'
-                        name='name'
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                </div>
-                <div className='form-group'>
-                    <label htmlFor='password'>Password:</label>
-                    <input
-                        type='password'
-                        id='password'
-                        name='password'
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </div>
-                <button type='submit'>Log in</button>
+                <TextField
+                    label="Name"
+                    variant="outlined"
+                    type='text'
+                    id='name'
+                    name='name'
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                />
+                <TextField
+                    label="Password"
+                    variant="outlined"
+                    type='password'
+                    id='password'
+                    name='password'
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <Button variant="contained" type='submit'>Log in</Button>
             </form>
             {error && <p className='error'>{error}</p>}
         </div>

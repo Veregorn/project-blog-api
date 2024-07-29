@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
+import Button from '@mui/material/Button';
+import { TextField, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
 
 // Function to decode the image URL
 function decodeImageURL(imageURL) {
@@ -55,21 +57,6 @@ function EditPost() {
         try {
             let image_url = oldImageFile;
 
-            // If the image URL is not empty, decode the URL and upload the image to Cloudinary
-            /* if (imageFile) {
-                const formData = new FormData();
-                formData.append('file', imageFile);
-                formData.append('upload_preset', process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET); // Reemplaza 'your_upload_preset' con tu preset de subida
-
-                const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const data = await response.json();
-                image_url = decodeImageURL(data.secure_url);
-            } */
-
             // We only need to upload the image if the user uploads a new one, otherwise we use the old image URL
             if (imageFile !== oldImageFile) {
                 console.log('Image File:', imageFile);
@@ -107,46 +94,52 @@ function EditPost() {
         <div className='main'>
             <h2>Edit post</h2>
             <form onSubmit={handleUpdatePost}>
-                <div className='form-group'>
-                    <label htmlFor='title'>Title:</label>
-                    <input
-                        type='text'
-                        id='title'
-                        name='title'
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
+                <TextField
+                    label="Title"
+                    variant="outlined"
+                    type='text'
+                    id='title'
+                    name='title'
+                    fullWidth
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                />
+                <TextField
+                    label="Content"
+                    variant="outlined"
+                    type='text'
+                    id='content'
+                    name='content'
+                    multiline
+                    minRows={4}
+                    fullWidth
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                />
+                <TextField
+                    label="Image"
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    type='file'
+                    id='image_url'
+                    name='image_url'
+                    fullWidth
+                    onChange={(e) => setImageFile(e.target.files[0])}
+                />
+                <FormGroup>
+                    <FormControlLabel
+                        control={<Checkbox
+                            id='published'
+                            name='published'
+                            checked={published}
+                            onChange={(e) => setPublished(e.target.checked)}
+                        />}
+                        label='Published'
                     />
-                </div>
-                <div className='form-group'>
-                    <label htmlFor='content'>Content:</label>
-                    <textarea
-                        id='content'
-                        name='content'
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                    />
-                </div>
-                <div className='form-group'>
-                    <label htmlFor='image_url'>Image URL:</label>
-                    <input
-                        type='file'
-                        id='image_url'
-                        name='image_url'
-                        onChange={(e) => setImageFile(e.target.files[0])}
-                    />
-                </div>
-                <div className='form-group'>
-                    <label htmlFor='published'>Published:</label>
-                    <input
-                        type='checkbox'
-                        id='published'
-                        name='published'
-                        checked={published}
-                        onChange={(e) => setPublished(e.target.checked)}
-                    />
-                </div>
+                </FormGroup>
                 {error && <p className='error'>{error}</p>}
-                <button type='submit'>Update Post</button>
+                <Button variant="contained" type='submit'>Update post</Button>
             </form>
         </div>
     );

@@ -1,5 +1,5 @@
 header {
-    background-color: #fff;
+    background-color: #f3f3f5;
     color: #000;
     width: 100%;
     display: flex;
@@ -8,12 +8,21 @@ header {
     padding: 0 2rem;
     box-sizing: border-box;
     height: 10vh;
-    align-items: center;   
+    align-items: center;
+    border-bottom: 1px solid #e6dac5;
+}
+
+#logo-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
 }
 
 .title {
     text-decoration: none;
     color: #000;
+    font-weight: 300;
 }
 
 #nav-container {
@@ -36,22 +45,5 @@ header {
 
 .welcome-message {
     font-size: 1rem;
-    color: #000;
-}
-
-.header-button {
-    background-color: #61dafb;
-    color: #fff;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 0.8rem;
-    font-weight: 600;
-}
-
-.header-button:hover {
-    opacity: 0.8;
-    color: #fff;
+    color: #8a8888;
 }

@@ -2,6 +2,8 @@ import '../styles/NewPost.css';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import Button from '@mui/material/Button';
+import { TextField, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
 
 // Function to decode the image URL
 function decodeImageURL(imageURL) {
@@ -68,46 +70,52 @@ function NewPost() {
         <div className='main'>
             <h2>New post</h2>
             <form onSubmit={handleCreatePost}>
-                <div className='form-group'>
-                    <label htmlFor='title'>Title:</label>
-                    <input
-                        type='text'
-                        id='title'
-                        name='title'
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
+                <TextField
+                    label="Title"
+                    variant="outlined"
+                    type='text'
+                    id='title'
+                    name='title'
+                    fullWidth
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                />
+                <TextField
+                    label="Content"
+                    variant="outlined"
+                    type='text'
+                    id='content'
+                    name='content'
+                    multiline
+                    minRows={4}
+                    fullWidth
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                />
+                <TextField
+                    label="Image"
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    type='file'
+                    id='image_url'
+                    name='image_url'
+                    fullWidth
+                    onChange={(e) => setImageFile(e.target.files[0])}
+                />
+                <FormGroup>
+                    <FormControlLabel
+                        control={<Checkbox
+                            id='published'
+                            name='published'
+                            checked={published}
+                            onChange={(e) => setPublished(e.target.checked)}
+                        />}
+                        label='Published'
                     />
-                </div>
-                <div className='form-group'>
-                    <label htmlFor='content'>Content:</label>
-                    <textarea
-                        id='content'
-                        name='content'
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                    />
-                </div>
-                <div className='form-group'>
-                    <label htmlFor='image_url'>Image URL:</label>
-                    <input
-                        type='file'
-                        id='image_url'
-                        name='image_url'
-                        onChange={(e) => setImageFile(e.target.files[0])}
-                    />
-                </div>
-                <div className='form-group'>
-                    <label htmlFor='published'>Published:</label>
-                    <input
-                        type='checkbox'
-                        id='published'
-                        name='published'
-                        checked={published}
-                        onChange={(e) => setPublished(e.target.checked)}
-                    />
-                </div>
+                </FormGroup>
                 {error && <p className='error'>{error}</p>}
-                <button type='submit'>Create Post</button>
+                <Button variant="contained" type='submit'>Create post</Button>
             </form>
         </div>
     );

@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import '../styles/Home.css';
 import { Link } from 'react-router-dom';
+import { Chip, Card, CardContent, CardActions, CardMedia, Button, Divider } from '@mui/material';
+import Typography from '@mui/material/Typography';
+import decodeImageURL from '../services/decodeImageURL';
+import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 
 function Home({ user }) {
     const [posts, setPosts] = useState([]);
@@ -53,21 +57,55 @@ function Home({ user }) {
     return (
         <div className='main'>
             <h2>Posts</h2>
-            {posts.map((post) => (
-                <div className='post-title-container' key={post._id}>
-                    <Link to={`/post/${post._id}`} className='post-title'>{post.title}</Link>
-                    {(user.isLoggedIn && user.type === 'admin' && !post.published) &&
-                        <span className='unpublished'>Unpublished</span>
-                    }
-                </div>
-            ))}
+            <Grid container spacing={8}>
+                {posts.map((post) => (
+                    <Grid item xs={12} sm={6} md={6} lg={4} key={post._id}>
+                        <Card key={post._id}>
+                            <>
+                                <CardMedia
+                                    component='img'
+                                    height='200'
+                                    image={decodeImageURL(post.image_url)}
+                                    alt={post.title}
+                                />
+                                <CardContent>
+                                    <Typography variant='h5' component='div'>
+                                        {post.title}
+                                    </Typography>
+                                </CardContent>
+                                <CardActions>
+                                    <Button size='small' component={Link} to={`/post/${post._id}`}>Read now</Button>
+                                    {(user.isLoggedIn && user.type === 'admin' && !post.published) &&
+                                        <Chip label='Unpublished' variant='outlined' color='primary' />
+                                    }
+                                </CardActions>
+                            </>
+                        </Card>
+                    </Grid>
+                ))}
+            </Grid>
             <h2>Last Comments</h2>
-            {comments.map((comment) => (
-                <div className='comment' key={comment._id}>
-                    <p>{comment.content}</p>
-                    <Link to={`/post/${comment.post._id}`}>Post: {comment.post.title}</Link>
-                </div>
-            ))}
+            <Grid container spacing={8}>
+                {comments.map((comment) => (
+                    <Grid item xs={12} sm={6} md={6} lg={4} key={comment._id}>
+                        <Card key={comment._id}>
+                            <CardContent>
+                                <Typography variant='subtitle2'>{comment.user.name}</Typography>
+                                <Typography variant='body2'> in </Typography>
+                                <Typography variant='subtitle2' sx={{ mb: 2 }}>{comment.post.title}</Typography>
+                                <Divider flexItem sx={{ mb: 2 }}/>
+                                <Typography variant='body2' component='div' sx={{ mb: 2 }}>
+                                    {comment.content}
+                                </Typography>
+                                <Divider flexItem/>
+                            </CardContent>
+                            <CardActions>
+                                <Button size='small' component={Link} to={`/post/${comment.post._id}`}>Read post</Button>
+                            </CardActions>
+                        </Card>
+                    </Grid>
+                ))}
+            </Grid>
         </div>
     );
 }

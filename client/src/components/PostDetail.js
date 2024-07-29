@@ -3,22 +3,11 @@ import { useParams } from 'react-router-dom';
 import api from '../services/api';
 import '../styles/PostDetail.css';
 import { useNavigate } from 'react-router-dom';
-
-// Function to decode the image URL
-function decodeImageURL(imageURL) {
-    const entities = {
-        '&%23x2F;': '/',
-        '&#x2F;': '/',
-        '&amp;': '&',
-        '&lt;': '<',
-        '&gt;': '>',
-        '&quot;': '"',
-        '&#39;': "'"
-    };
-    return imageURL.replace(/&%23x2F;|&#x2F;|&amp;|&lt;|&gt;|&quot;|&#39;/g, function (match) {
-        return entities[match];
-    });
-};
+import decodeImageURL from '../services/decodeImageURL';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
+import { Card, CardContent, CardActions, Button, Divider, TextField } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 function PostDetail({ user }) {
     const navigate = useNavigate();
@@ -114,50 +103,69 @@ function PostDetail({ user }) {
 
     return (
         <div className='main'>
-            <h1>{post.title}</h1>
+            <Typography
+                variant="h1"
+                align='center'
+                lineHeight={2}
+                fontSize={60}
+                marginTop={10}
+            >{post.title}</Typography>
             {post.image_url && <img className='post-image' src={decodeImageURL(post.image_url)} alt={post.title} />}
-            <p>{post.content}</p>
-            {post.author && <p>Author: {post.author.name}</p>}
-            {post.created_at && <p>Created at: {new Date(post.created_at).toLocaleString()}</p>}
+            {/* <p className='post-detail-content'>{post.content}</p> */}
+            <Typography
+                variant="body1"
+                align='justify'
+                lineHeight={2}
+                fontSize={20}
+            >{post.content}</Typography>
+            {post.author && <Typography variant='subtitle2' color={'#777'}>By {post.author.name}</Typography>}
+            {post.created_at && <Typography variant='subtitle2' color={'#777'}>Published on {new Date(post.created_at).toLocaleDateString()}</Typography>}
             {/* Show a 'Edit post' button only if the user is an admin */}
-            {user.isLoggedIn && user.type === 'admin' && <button onClick={() => navigate(`/edit-post/${id}`)}>Edit post</button>}
+            {user.isLoggedIn && user.type === 'admin' && <Button variant="contained" onClick={() => navigate(`/edit-post/${id}`)}>Edit post</Button>}
             {/* Show a 'Delete post' button only if the user is an admin */}
-            {user.isLoggedIn && user.type === 'admin' && <button onClick={handleDeletePost}>Delete post</button>}
+            {user.isLoggedIn && user.type === 'admin' && <Button variant="contained" onClick={handleDeletePost}>Delete post</Button>}
             {user.isLoggedIn && (
                 <>
-                    <hr />
+                    <Divider flexItem />
                     <form onSubmit={handleCreateComment}>
-                        <div className='form-group'>
-                            <label htmlFor='content'>Comment:</label>
-                            <textarea id='content' name='content' value={commentContent} onChange={(e) => setCommentContent(e.target.value)}></textarea>
-                        </div>
-                        <button type='submit'>Post comment</button>
+                        <TextField
+                            label="Comment"
+                            variant="outlined"
+                            type='text'
+                            id='content'
+                            name='content'
+                            multiline
+                            minRows={4}
+                            value={commentContent}
+                            onChange={(e) => setCommentContent(e.target.value)}
+                        />
+                        <Button variant="contained" type='submit'>Post comment</Button>
                     </form>
-                    <hr />
+                    <Divider flexItem />
                 </>
             )}
             {comments.length > 0 ? (
                 <>
-                    <h2>Comments</h2>
-                    {comments.map((comment) => (
-                        <div key={comment._id}>
-                            <p>{comment.content}</p>
-                            {comment.user && <p>Author: {comment.user.name}</p>}
-                            {comment.timestamp && <p>Created at: {new Date(comment.timestamp).toLocaleString()}</p>}
-                            {/* Show a 'Delete comment' button only if the user is an admin */}
-                            {user.isLoggedIn && user.type === 'admin' && <button onClick={async () => {
-                                try {
-                                    await api.delete(`/api/posts/${id}/comments/${comment._id}`);
-                                    const response = await api.get(`/api/posts/${id}/comments`);
-                                    setComments(response.data);
-                                    setError('');
-                                } catch (error) {
-                                    console.log('Error deleting comment', error);
-                                    setError('Error deleting comment');
-                                }
-                            }}>Delete comment</button>}
-                        </div>
-                    ))}
+                    <Typography variant='h2' sx={{ mt: 2 }}>Comments</Typography>
+                    <Grid container spacing={8}>
+                        {comments.map((comment) => (
+                            <Grid item xs={12} sm={6} md={6} lg={4} key={comment._id}>
+                                <Card key={comment._id}>
+                                    <CardContent>
+                                        <Typography variant='subtitle2'>{comment.user.name}</Typography>
+                                        <Divider flexItem sx={{ mb: 2 }}/>
+                                        <Typography variant='body2' component='div' sx={{ mb: 2 }}>
+                                            {comment.content}
+                                        </Typography>
+                                    </CardContent>
+                                    <CardActions>
+                                        {/* If user is admin, we need to place a button to delete the comment */}
+                                        {user.isLoggedIn && user.type === 'admin' && <Button size="small" component={Link} >Delete comment</Button>}
+                                    </CardActions>
+                                </Card>
+                            </Grid>
+                        ))}
+                    </Grid>
                 </>
             ) : (
                 <p>No comments yet.</p>
