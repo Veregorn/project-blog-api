@@ -8,6 +8,9 @@ const commentController = require('../controllers/commentController');
 const userController = require('../controllers/userController');
 const authController = require('../controllers/authController');
 
+// dotenv package
+require('dotenv').config();
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.send(`Welcome to the Express API server listening on port ${process.env.PORT}`);
