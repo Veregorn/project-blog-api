@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-const app = require('../api/index');
+const app = require('../index');
 const debug = require('debug')('project-blog-api:server');
 const http = require('http');
 
