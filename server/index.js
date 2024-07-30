@@ -20,11 +20,6 @@ const cors = require('cors');
 // Load the environment variables
 require('dotenv').config();
 
-// Configuring CORS
-const corsOptions = {
-  origin: ['http://localhost:3001', 'https://project-blog-api-client.vercel.app'],
-};
-
 // Configuring the JWT Strategy
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -50,7 +45,7 @@ const router = require('./routes/index');
 const app = express();
 
 // Enable CORS
-app.use(cors(corsOptions));
+app.use(cors());
 
 // Set up default mongoose connection
 mongoose.set('strictQuery', false);
