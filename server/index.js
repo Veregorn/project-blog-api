@@ -14,8 +14,16 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 // Import the User model
 const User = require('./models/user');
 
+// CORS package
+const cors = require('cors');
+
 // Load the environment variables
 require('dotenv').config();
+
+// Configuring CORS
+const corsOptions = {
+  origin: ['http://localhost:3001', 'https://project-blog-api-client.vercel.app'],
+};
 
 // Configuring the JWT Strategy
 const jwtOptions = {
@@ -40,6 +48,9 @@ passport.use(new JwtStrategy(jwtOptions, async (jwt_payload, done) => {
 const router = require('./routes/index');
 
 const app = express();
+
+// Enable CORS
+app.use(cors(corsOptions));
 
 // Set up default mongoose connection
 mongoose.set('strictQuery', false);

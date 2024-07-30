@@ -1,8 +1,10 @@
 import axios from 'axios';
 
+require('dotenv').config();
+
 // Configuring the base URL for our API
 const api = axios.create({
-  baseURL: 'http://localhost:3001',
+  baseURL: process.env.REACT_APP_SERVER_URL
 });
 
 // Interceptor to add the token to the request headers
