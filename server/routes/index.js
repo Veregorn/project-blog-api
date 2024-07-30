@@ -10,7 +10,7 @@ const authController = require('../controllers/authController');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.send('Welcome to the Express API');
+  res.send(`Welcome to the Express API server listening on port ${process.env.PORT}`);
 });
 
 // We need to protect create, edit and delete routes
