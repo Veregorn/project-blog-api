@@ -3,6 +3,7 @@ const Post = require('../models/post');
 const getDevToArticles = require('../utils/ai-posts-creator/devToUrlsRecoverer');
 const fetchArticleContent = require('../utils/ai-posts-creator/htmlParser');
 const articlesHandler = require('../utils/ai-posts-creator/articlesHandler');
+const decodeImageURL = require('../utils/decodeImageURL');
 
 // Import async
 const asyncHandler = require('express-async-handler');
@@ -110,7 +111,7 @@ exports.createPost = [
             published: req.body.published,
             created_at: req.body.created_at,
             author: req.user._id, // req.user is set in the auth middleware
-            source: req.body.source,
+            source: decodeImageURL(req.body.source),
         });
 
         // Check for errors
