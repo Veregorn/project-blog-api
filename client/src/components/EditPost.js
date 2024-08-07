@@ -61,7 +61,7 @@ function EditPost() {
                 image_url = decodeImageURL(data.secure_url);
             };
 
-            const decodedSource = decodeImageURL(source);
+            setSource(decodeImageURL(source));
 
             await api.put(`/api/posts/${id}`, { 
             // Create the post
@@ -69,7 +69,7 @@ function EditPost() {
                 content, 
                 image_url, 
                 published,
-                decodedSource
+                source
             });
 
             // Redirect the user to the home page
@@ -93,6 +93,16 @@ function EditPost() {
                     fullWidth
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                />
+                <TextField
+                    label="Source"
+                    variant="outlined"
+                    type='text'
+                    id='source'
+                    name='source'
+                    fullWidth
+                    value={source}
+                    onChange={(e) => setSource(e.target.value)}
                 />
                 <TextField
                     label="Content"

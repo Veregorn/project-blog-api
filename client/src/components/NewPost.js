@@ -36,7 +36,7 @@ function NewPost() {
                 image_url = decodeImageURL(data.secure_url);
             }
 
-            const decodedSource = decodeImageURL(source);
+            setSource(decodeImageURL(source));
 
             // Create the post
             await api.post('/api/posts', { 
@@ -44,7 +44,7 @@ function NewPost() {
                 content, 
                 image_url, 
                 published,
-                decodedSource
+                source
             });
 
             // Redirect the user to the home page
