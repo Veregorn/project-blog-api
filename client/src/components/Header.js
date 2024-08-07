@@ -4,13 +4,29 @@ import Button from '@mui/material/Button';
 import logo from '../logo.svg';
 import { Chip } from '@mui/material';
 import { Login, Logout, AccountCircle } from '@mui/icons-material';
+import api from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
 function Header({ user, handleLogout }) {
+
+    const navigate = useNavigate(); // We need to use the useHistory hook to redirect the user
+
+    async function handleGeneratePosts() {
+        try {
+            const response = await api.post('/api/posts/ai-generate');
+            console.log(response.data);
+            navigate('/login'); // Redirect the user to the login page
+        }
+        catch (error) {
+            console.log('Error generating posts', error);
+        }
+    };
+
     return (
         <header>
             <div id='logo-container'>
                 <img src={logo} alt='logo' style={{ width: '50px', height: '50px' }} />
-                <h4><Link to={'/'} className='title'>Blog Example</Link></h4>
+                <h4><Link to={'/'} className='title'>DevNews en Español</Link></h4>
             </div>
             <div id='nav-container'>
                 {/* We will show the Log in and Sign up links only if the user is not logged in*/}
@@ -20,6 +36,7 @@ function Header({ user, handleLogout }) {
                         <p className='welcome-message'>Welcome {user.name}!</p>
                         {/* Display a 'New Post' button only if the user is an admin */}
                         {user.type === 'admin' && <Button variant="contained" component={Link} to={'/new-post'}>New Post</Button>}
+                        {user.type === 'admin' && <Button variant="contained" onClick={handleGeneratePosts}>Generate Posts</Button>}
                         <Chip
                             label="Log out"
                             onClick={handleLogout}

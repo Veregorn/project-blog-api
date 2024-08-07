@@ -1,6 +1,8 @@
 // Import models
 const Post = require('../models/post');
-const User = require('../models/user');
+const getDevToArticles = require('../utils/ai-posts-creator/devToUrlsRecoverer');
+const fetchArticleContent = require('../utils/ai-posts-creator/htmlParser');
+const articlesHandler = require('../utils/ai-posts-creator/articlesHandler');
 
 // Import async
 const asyncHandler = require('express-async-handler');
@@ -84,6 +86,10 @@ exports.createPost = [
         .trim()
         .default(Date.now())
         .escape(),
+    body('source')
+        .optional({ checkFalsy: true })
+        .trim()
+        .escape(),
 
     // Process request after validation and sanitization
     asyncHandler(async (req, res, next) => {
@@ -104,6 +110,7 @@ exports.createPost = [
             published: req.body.published,
             created_at: req.body.created_at,
             author: req.user._id, // req.user is set in the auth middleware
+            source: req.body.source,
         });
 
         // Check for errors
@@ -119,6 +126,40 @@ exports.createPost = [
         }
     }),
 ];
+
+// Handle AI generated posts create on POST
+exports.generatePosts = asyncHandler(async (req, res, next) => {
+    // Only allow admin users to generate posts
+    if (req.user.type !== 'admin') {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    try {
+        // Get top article urls from dev.to
+        const urlsArray = await getDevToArticles(); // Get 3 articles URLs from DEV.to
+        const rawArticlesArray = await Promise.all(urlsArray.map(fetchArticleContent)); // Get the content of the 3 articles
+        const processedArticlesArray = await articlesHandler(rawArticlesArray);
+
+        // Save every article as a post
+        for (const article of processedArticlesArray) {
+            const post = new Post({
+                title: article.title,
+                content: article.summary,
+                image_url: article.image,
+                published: true,
+                created_at: Date.now(),
+                author: req.user._id, // req.user is set in the auth middleware
+                source: article.source,
+            });
+
+            await post.save();
+        };
+
+        res.json({ message: 'Posts generated successfully' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error generating posts' });
+    }
+});
 
 // Handle post update on PUT
 exports.updatePost = [
@@ -138,6 +179,10 @@ exports.updatePost = [
     body('published', 'Published must not be empty.')
         .trim()
         .isLength({ min: 1 })
+        .escape(),
+    body('source')
+        .optional({ checkFalsy: true })
+        .trim()
         .escape(),
 
     // Process request after validation and sanitization
@@ -159,6 +204,7 @@ exports.updatePost = [
             created_at: Date.now(),
             author: req.user._id, // req.user is set in the auth middleware
             _id: req.params.id,
+            source: req.body.source,
         });
 
         // Check for errors

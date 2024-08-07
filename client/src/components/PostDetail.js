@@ -8,6 +8,8 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { Card, CardContent, CardActions, Button, Divider, TextField } from '@mui/material';
 import { Link } from 'react-router-dom';
+import MarkdownIt from 'markdown-it';
+import DOMPurify from 'dompurify';
 
 function PostDetail({ user }) {
     const navigate = useNavigate();
@@ -16,6 +18,19 @@ function PostDetail({ user }) {
     const [comments, setComments] = useState([]);
     const [commentContent, setCommentContent] = useState('');
     const [error, setError] = useState('');
+
+    const md = new MarkdownIt({
+        html: true,
+        linkify: true,
+        typographer: true,
+        breaks: true
+    });
+
+    // Convert the markdown content to HTML
+    const rawHTMLContent = md.render(post.content || '');
+
+    // Sanitize the HTML content
+    const sanitizedHTMLContent = DOMPurify.sanitize(rawHTMLContent);
 
     useEffect(() => {
         async function loadPost() {
@@ -111,19 +126,23 @@ function PostDetail({ user }) {
                 marginTop={10}
             >{post.title}</Typography>
             {post.image_url && <img className='post-image' src={decodeImageURL(post.image_url)} alt={post.title} />}
+            {/* Link to the source of the post */}
+            {post.source && <Typography variant='subtitle2' color={'#777'}>Post original: <a href={post.source} target='_blank' rel='noreferrer'>{post.source}</a></Typography>}
             {/* <p className='post-detail-content'>{post.content}</p> */}
             <Typography
                 variant="body1"
                 align='justify'
                 lineHeight={2}
                 fontSize={20}
-            >{post.content}</Typography>
+            >{/* Renderiza el contenido del post */}
+            <div dangerouslySetInnerHTML={{ __html: sanitizedHTMLContent }} />
+            {/* Otros componentes y lógica */}</Typography>
             {post.author && <Typography variant='subtitle2' color={'#777'}>By {post.author.name}</Typography>}
             {post.created_at && <Typography variant='subtitle2' color={'#777'}>Published on {new Date(post.created_at).toLocaleDateString()}</Typography>}
             {/* Show a 'Edit post' button only if the user is an admin */}
-            {user.isLoggedIn && user.type === 'admin' && <Button variant="contained" onClick={() => navigate(`/edit-post/${id}`)}>Edit post</Button>}
+            {user.isLoggedIn && user.type === 'admin' && <Button className='action-button' variant="contained" onClick={() => navigate(`/edit-post/${id}`)}>Edit post</Button>}
             {/* Show a 'Delete post' button only if the user is an admin */}
-            {user.isLoggedIn && user.type === 'admin' && <Button variant="contained" onClick={handleDeletePost}>Delete post</Button>}
+            {user.isLoggedIn && user.type === 'admin' && <Button className='action-button' variant="contained" onClick={handleDeletePost}>Delete post</Button>}
             {user.isLoggedIn && (
                 <>
                     <Divider flexItem />

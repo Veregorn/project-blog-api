@@ -60,7 +60,7 @@ function Home({ user }) {
             <Grid container spacing={8}>
                 {posts.map((post) => (
                     <Grid item xs={12} sm={6} md={6} lg={4} key={post._id}>
-                        <Card key={post._id}>
+                        <Card key={post._id} className='card'>
                             <>
                                 <CardMedia
                                     component='img'
@@ -84,7 +84,7 @@ function Home({ user }) {
                     </Grid>
                 ))}
             </Grid>
-            <h2>Last Comments</h2>
+            {comments.length > 0 && <h2>Last Comments</h2>}
             <Grid container spacing={8}>
                 {comments.map((comment) => (
                     <Grid item xs={12} sm={6} md={6} lg={4} key={comment._id}>

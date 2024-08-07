@@ -24,7 +24,7 @@
 }
 
 .card-media {
-    object-fit: cover;
+    object-fit: contain;
     width: 100%;
     height: 200px; /* Ajusta la altura según sea necesario */
 }
@@ -35,4 +35,11 @@
 
 .actions a:hover {
     text-decoration: none;
+}
+
+.card {
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }

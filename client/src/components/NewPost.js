@@ -27,6 +27,7 @@ function NewPost() {
     const [content, setContent] = React.useState('');
     const [imageFile, setImageFile] = React.useState(null);
     const [published, setPublished] = React.useState(false);
+    const [source, setSource] = React.useState('');
     const [error, setError] = React.useState('');
 
     async function handleCreatePost(event) {
@@ -55,7 +56,8 @@ function NewPost() {
                 title, 
                 content, 
                 image_url, 
-                published
+                published,
+                source
             });
 
             // Redirect the user to the home page
@@ -79,6 +81,16 @@ function NewPost() {
                     fullWidth
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                />
+                <TextField
+                    label="Source"
+                    variant="outlined"
+                    type='text'
+                    id='source'
+                    name='source'
+                    fullWidth
+                    value={source}
+                    onChange={(e) => setSource(e.target.value)}
                 />
                 <TextField
                     label="Content"

@@ -28,6 +28,7 @@ router.get('/posts/:id', postController.getPostById);
 router.post('/posts', passport.authenticate('jwt', { session: false }), postController.createPost);
 router.put('/posts/:id', passport.authenticate('jwt', { session: false }), postController.updatePost);
 router.delete('/posts/:id', passport.authenticate('jwt', { session: false }), postController.deletePost);
+router.post('/posts/ai-generate', passport.authenticate('jwt', { session: false }), postController.generatePosts); // AI generate posts from Dev.to
 
 // Comment routes
 router.get('/posts/:postId/comments', commentController.getAllCommentsInPost);
