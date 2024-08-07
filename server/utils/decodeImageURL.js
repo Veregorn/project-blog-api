@@ -1,5 +1,5 @@
 // Function to decode the image URL
-function decodeImageURL(imageURL) {
+function decodeImageUrl(imageURL) {
     const entities = {
         '&%23x2F;': '/',
         '&#x2F;': '/',
@@ -14,4 +14,4 @@ function decodeImageURL(imageURL) {
     });
 };
 
-export default decodeImageURL;
+export default decodeImageUrl;

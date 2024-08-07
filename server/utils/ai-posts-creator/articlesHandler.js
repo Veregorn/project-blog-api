@@ -7,7 +7,7 @@ const { createOpenAI } = require('@ai-sdk/openai');
 const sharp = require('sharp');
 const axios = require('axios');
 const FormData = require('form-data');
-import decodeImageURL from '../decodeImageUrl';
+import decodeImageUrl from '../decodeImageUrl';
 require('dotenv').config();
 
 const openai = createOpenAI({
@@ -46,7 +46,7 @@ async function processImage(imageURL) {
         );
     
         // Devolver la URL segura de la imagen subida
-        return decodeImageURL(cloudinaryResponse.data.secure_url);
+        return decodeImageUrl(cloudinaryResponse.data.secure_url);
     } catch (error) {
         console.error('Error al procesar y subir la imagen:', error);
         throw error;
