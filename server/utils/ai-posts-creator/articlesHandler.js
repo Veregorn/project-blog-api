@@ -7,7 +7,6 @@ const { createOpenAI } = require('@ai-sdk/openai');
 const sharp = require('sharp');
 const axios = require('axios');
 const FormData = require('form-data');
-import decodeImageUrl from '../decodeImageUrl';
 require('dotenv').config();
 
 const openai = createOpenAI({
@@ -16,6 +15,22 @@ const openai = createOpenAI({
 });
 
 const model = 'gpt-4o-mini'; // Usar el modelo adecuado
+
+// Function to decode the image URL
+function decodeImageURL(imageURL) {
+    const entities = {
+        '&%23x2F;': '/',
+        '&#x2F;': '/',
+        '&amp;': '&',
+        '&lt;': '<',
+        '&gt;': '>',
+        '&quot;': '"',
+        '&#39;': "'"
+    };
+    return imageURL.replace(/&%23x2F;|&#x2F;|&amp;|&lt;|&gt;|&quot;|&#39;/g, function (match) {
+        return entities[match];
+    });
+};
 
 // Function to process the images
 async function processImage(imageURL) {
@@ -46,7 +61,7 @@ async function processImage(imageURL) {
         );
     
         // Devolver la URL segura de la imagen subida
-        return decodeImageUrl(cloudinaryResponse.data.secure_url);
+        return decodeImageURL(cloudinaryResponse.data.secure_url);
     } catch (error) {
         console.error('Error al procesar y subir la imagen:', error);
         throw error;

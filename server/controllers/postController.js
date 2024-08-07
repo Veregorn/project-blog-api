@@ -3,7 +3,6 @@ const Post = require('../models/post');
 const getDevToArticles = require('../utils/ai-posts-creator/devToUrlsRecoverer');
 const fetchArticleContent = require('../utils/ai-posts-creator/htmlParser');
 const articlesHandler = require('../utils/ai-posts-creator/articlesHandler');
-const decodeImageURL = require('../utils/decodeImageUrl').default;
 
 // Import async
 const asyncHandler = require('express-async-handler');
@@ -13,6 +12,22 @@ const { body, validationResult } = require('express-validator');
 
 // Import mongoose
 const mongoose = require('mongoose');
+
+// Function to decode the image URL
+function decodeImageURL(imageURL) {
+    const entities = {
+        '&%23x2F;': '/',
+        '&#x2F;': '/',
+        '&amp;': '&',
+        '&lt;': '<',
+        '&gt;': '>',
+        '&quot;': '"',
+        '&#39;': "'"
+    };
+    return imageURL.replace(/&%23x2F;|&#x2F;|&amp;|&lt;|&gt;|&quot;|&#39;/g, function (match) {
+        return entities[match];
+    });
+};
 
 // Respond with a json list of all published posts
 exports.getPublishedPosts = asyncHandler(async (req, res, next) => {
