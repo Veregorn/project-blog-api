@@ -35,8 +35,9 @@ function NewPost() {
                 const data = await response.json();
                 image_url = decodeImageURL(data.secure_url);
             }
-
+            console.log('Source before:', source);
             setSource(decodeImageURL(source));
+            console.log('Source after:', source);
 
             // Create the post
             await api.post('/api/posts', { 
