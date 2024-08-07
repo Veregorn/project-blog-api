@@ -3,7 +3,7 @@ const Post = require('../models/post');
 const getDevToArticles = require('../utils/ai-posts-creator/devToUrlsRecoverer');
 const fetchArticleContent = require('../utils/ai-posts-creator/htmlParser');
 const articlesHandler = require('../utils/ai-posts-creator/articlesHandler');
-const decodeImageURL = require('../utils/decodeImageUrl');
+const decodeImageURL = require('../utils/decodeImageUrl').default;
 
 // Import async
 const asyncHandler = require('express-async-handler');
