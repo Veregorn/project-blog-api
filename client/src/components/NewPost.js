@@ -4,22 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import Button from '@mui/material/Button';
 import { TextField, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
-
-// Function to decode the image URL
-function decodeImageURL(imageURL) {
-    const entities = {
-        '&%23x2F;': '/',
-        '&#x2F;': '/',
-        '&amp;': '&',
-        '&lt;': '<',
-        '&gt;': '>',
-        '&quot;': '"',
-        '&#39;': "'"
-    };
-    return imageURL.replace(/&%23x2F;|&#x2F;|&amp;|&lt;|&gt;|&quot;|&#39;/g, function (match) {
-        return entities[match];
-    });
-};
+import decodeImageURL from '../services/decodeImageURL';
 
 function NewPost() {
     const navigate = useNavigate();
@@ -51,13 +36,15 @@ function NewPost() {
                 image_url = decodeImageURL(data.secure_url);
             }
 
+            const decodedSource = decodeImageURL(source);
+
             // Create the post
             await api.post('/api/posts', { 
                 title, 
                 content, 
                 image_url, 
                 published,
-                source
+                decodedSource
             });
 
             // Redirect the user to the home page

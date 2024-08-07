@@ -6,22 +6,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { TextField, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
-
-// Function to decode the image URL
-function decodeImageURL(imageURL) {
-    const entities = {
-        '&%23x2F;': '/',
-        '&#x2F;': '/',
-        '&amp;': '&',
-        '&lt;': '<',
-        '&gt;': '>',
-        '&quot;': '"',
-        '&#39;': "'"
-    };
-    return imageURL.replace(/&%23x2F;|&#x2F;|&amp;|&lt;|&gt;|&quot;|&#39;/g, function (match) {
-        return entities[match];
-    });
-};
+import decodeImageURL from '../services/decodeImageURL';
 
 function EditPost() {
     const navigate = useNavigate();
@@ -30,6 +15,7 @@ function EditPost() {
     const [imageFile, setImageFile] = React.useState('');
     const [oldImageFile, setOldImageFile] = React.useState('');
     const [published, setPublished] = React.useState(false);
+    const [source, setSource] = React.useState('');
     const [error, setError] = React.useState('');
     const { id } = useParams();
 
@@ -41,6 +27,7 @@ function EditPost() {
                 setContent(response.data.content);
                 setPublished(response.data.published);
                 setOldImageFile(response.data.image_url);
+                setSource(response.data.source);
                 setError('');
             } catch (error) {
                 console.log('Error loading post', error);
@@ -74,12 +61,15 @@ function EditPost() {
                 image_url = decodeImageURL(data.secure_url);
             };
 
+            const decodedSource = decodeImageURL(source);
+
             await api.put(`/api/posts/${id}`, { 
             // Create the post
                 title, 
                 content, 
                 image_url, 
-                published
+                published,
+                decodedSource
             });
 
             // Redirect the user to the home page
