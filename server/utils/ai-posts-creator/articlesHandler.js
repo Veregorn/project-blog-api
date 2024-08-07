@@ -51,11 +51,11 @@ async function processImage(imageURL) {
         // Crear un FormData para subir la imagen a Cloudinary
         const formData = new FormData();
         formData.append('file', resizedImageBuffer, { filename: 'image.webp' });
-        formData.append('upload_preset', process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET);
+        formData.append('upload_preset', process.env.CLOUDINARY_UPLOAD_PRESET);
     
         // Subir la imagen a Cloudinary
         const cloudinaryResponse = await axios.post(
-          `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`,
+          `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload`,
           formData,
           { headers: formData.getHeaders() }
         );
