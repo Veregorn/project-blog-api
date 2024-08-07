@@ -7,7 +7,7 @@ const { createOpenAI } = require('@ai-sdk/openai');
 const sharp = require('sharp');
 const axios = require('axios');
 const FormData = require('form-data');
-const deceodeImageURL = require('..decodeImageURL');
+const decodeImageURL = require('../decodeImageUrl');
 require('dotenv').config();
 
 const openai = createOpenAI({
