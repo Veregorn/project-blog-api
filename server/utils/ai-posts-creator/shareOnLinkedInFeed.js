@@ -29,6 +29,9 @@ async function shareOnLinkedInFeed(titlesArray) {
                     ]
                 }
             },
+            "visibility": {
+                "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"
+            }
         }, {
             headers: { 
                 'Authorization': `Bearer ${process.env.LINKEDIN_BEARER_TOKEN}`,
