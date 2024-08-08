@@ -1,7 +1,6 @@
 // En este fichero vamos a leer el contenido del fichero 'raw-articles.json' y vamos a pasarle lo que hay en el campo 'content' de cada artículo a un cliente del SDK de Vercel que se encargará de usar la API de OpenAI para generar un resumen y traducción de cada artículo.
 // Por último, vamos a guardar el resultado en un fichero 'processed-articles.json' donde cada artículo tendrá un campo adicional 'summary' con el resumen traducido de su contenido.
 
-const fs = require('fs');
 const { generateText } = require('ai');
 const { createOpenAI } = require('@ai-sdk/openai');
 const sharp = require('sharp');

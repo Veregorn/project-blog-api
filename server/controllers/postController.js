@@ -3,6 +3,7 @@ const Post = require('../models/post');
 const getDevToArticles = require('../utils/ai-posts-creator/devToUrlsRecoverer');
 const fetchArticleContent = require('../utils/ai-posts-creator/htmlParser');
 const articlesHandler = require('../utils/ai-posts-creator/articlesHandler');
+const shareOnLinkedInFeed = require('../utils/ai-posts-creator/shareOnLinkedInFeed');
 
 // Import async
 const asyncHandler = require('express-async-handler');
@@ -155,6 +156,12 @@ exports.generatePosts = asyncHandler(async (req, res, next) => {
         const urlsArray = await getDevToArticles(); // Get 3 articles URLs from DEV.to
         const rawArticlesArray = await Promise.all(urlsArray.map(fetchArticleContent)); // Get the content of the 3 articles
         const processedArticlesArray = await articlesHandler(rawArticlesArray);
+
+        // Let's save all the titles in an array to use them to publish an article on LinkedIn
+        const titlesArray = processedArticlesArray.map(article => article.title);
+
+        // Share the articles on LinkedIn
+        await shareOnLinkedInFeed(titlesArray);
 
         // Save every article as a post
         for (const article of processedArticlesArray) {
