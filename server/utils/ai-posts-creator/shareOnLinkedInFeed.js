@@ -7,7 +7,7 @@ async function shareOnLinkedInFeed(titlesArray) {
         const response = await axios.post('https://api.linkedin.com/v2/ugcPosts', {
 
             // Create the json object
-            "author": `rn:li:person:${process.env.LINKEDIN_CLIENT_ID}`,
+            "author": `urn:li:person:${process.env.LINKEDIN_CLIENT_ID}`,
             "lifecycleState": "PUBLISHED",
             "specificContent": {
                 "com.linkedin.ugc.ShareContent": {
