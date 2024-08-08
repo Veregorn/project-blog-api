@@ -4,7 +4,7 @@
 
 ## Descripción
 
-**DevNews en Español** es una plataforma que recopila las noticias más importantes del día en el mundo del desarrollo de software y las publica automáticamente en un blog. Además, comparte los títulos de estas noticias en LinkedIn, atrayendo a los usuarios a leer más en el blog.
+**DevNews en Español** es una plataforma que recopila las noticias más importantes del día en el mundo del desarrollo de software, las resume y traduce mediante IA, y las publica automáticamente en un blog. Además, comparte los títulos de estas noticias en LinkedIn, atrayendo a los usuarios a leer más en el blog.
 
 ## Características
 
