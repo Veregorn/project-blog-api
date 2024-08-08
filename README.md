@@ -15,7 +15,11 @@ I use JSON Web Token for Authentication. Normal users and admin user have differ
 
 - Recopilación automática de las noticias más top del último día de **Dev.to** a través de su API
 - Publicación de artículos en un blog con resúmenes y traducciones generados mediante la IA de **OpenAI** a través del **SDK de Vercel**.
-- Publicación de los títulos de las noticias en **LinkedIn** con un enlace al blog.
+- Publicación de los títulos de las noticias en **LinkedIn** con un enlace al blog (uso de la API de LinkedIn).
+- El servidor es un servidor **Express** que sirve una **API RESTful** para uso de un cliente **React** que hace uso de componentes de la librería **Material UI**.
+- La autenticación de usuarios se realiza mediante **JSON Web Token**.
+- El administrador y los usuarios estandar tienen distintos tipos de funcionalidad. Solo el admin puede publicar Posts, actualizarlos y eliminarlos.
+- Los usuarios estandar pueden comentar en los posts.
 
 ## Requisitos
 
