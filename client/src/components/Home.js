@@ -6,26 +6,36 @@ import { Chip, Card, CardContent, CardActions, CardMedia, Button, Divider } from
 import Typography from '@mui/material/Typography';
 import decodeImageURL from '../services/decodeImageURL';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
+import Pagination from '@mui/material/Pagination';
+
 
 function Home({ user }) {
     const [posts, setPosts] = useState([]);
     const [comments, setComments] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+
+    const handlePageChange = (event, value) => {
+        setCurrentPage(value);
+    }
 
     useEffect(() => {
-        async function loadPosts() {
+        async function loadPosts(currentPage) {
             // If the user is logged in and is admin, load all posts
             if (user.isLoggedIn && user.type === 'admin') {
                 try {
-                    const response = await api.get('/api/posts');
-                    setPosts(response.data);
+                    const response = await api.get(`/api/posts${currentPage ? `?page=${currentPage}` : ''}`);
+                    setPosts(response.data.posts);
+                    setTotalPages(response.data.totalPages);
                 } catch (error) {
                     console.log('Error loading posts', error);
                 }
                 return;
             } else {
                 try {
-                    const response = await api.get('/api/posts/published');
-                    setPosts(response.data);
+                    const response = await api.get(`/api/posts/published${currentPage ? `?page=${currentPage}` : ''}`);
+                    setPosts(response.data.posts);
+                    setTotalPages(response.data.totalPages);
                 } catch (error) {
                     console.log('Error loading posts', error);
                 }
@@ -42,9 +52,9 @@ function Home({ user }) {
             }
         }
 
-        loadPosts();
+        loadPosts(currentPage);
         loadComments();
-    }, [user]);
+    }, [user, currentPage]);
 
     if (posts.length === 0) {
         return (
@@ -58,22 +68,22 @@ function Home({ user }) {
         <div className='main'>
             <h2>Posts</h2>
             <Grid container spacing={8}>
-                {posts.map((post) => (
+                {posts.length > 0 && posts.map((post) => (
                     <Grid item xs={12} sm={6} md={6} lg={4} key={post._id}>
                         <Card key={post._id} className='card'>
                             <>
                                 <CardMedia
                                     component='img'
-                                    height='200'
+                                    sx= {{height: '200px'}}
                                     image={decodeImageURL(post.image_url)}
                                     alt={post.title}
                                 />
-                                <CardContent>
-                                    <Typography variant='h5' component='div'>
+                                <CardContent className='card-content'>
+                                    <Typography sx={{ fontSize: 18, textOverflow: 'ellipsis' }} component='div'>
                                         {post.title}
                                     </Typography>
                                 </CardContent>
-                                <CardActions>
+                                <CardActions className='card-actions'>
                                     <Button size='small' component={Link} to={`/post/${post._id}`}>Read now</Button>
                                     {(user.isLoggedIn && user.type === 'admin' && !post.published) &&
                                         <Chip label='Unpublished' variant='outlined' color='primary' />
@@ -83,11 +93,13 @@ function Home({ user }) {
                         </Card>
                     </Grid>
                 ))}
+                {posts.length === 0 && <h4>No posts found</h4>}
             </Grid>
+            <Pagination count={totalPages} color='primary' defaultPage={currentPage} onChange={handlePageChange} sx={{ mt: 2, textAlign: 'center' }}/>
             {comments.length > 0 && <h2>Last Comments</h2>}
             <Grid container spacing={8}>
                 {comments.map((comment) => (
-                    <Grid item xs={12} sm={6} md={6} lg={4} key={comment._id}>
+                    <Grid item xs={12} sm={6} md={6} lg={4} key={comment._id} sx={{ pb: 10 }}>
                         <Card key={comment._id}>
                             <CardContent>
                                 <Typography variant='subtitle2'>{comment.user.name}</Typography>

@@ -32,34 +32,76 @@ function decodeImageURL(imageURL) {
 
 // Respond with a json list of all published posts
 exports.getPublishedPosts = asyncHandler(async (req, res, next) => {
-    // Get all published posts
-    const posts = await Post.find({ published: true })
-        .sort({ created_at: -1 })
-        .populate('author');
+    const page = parseInt(req.query.page) || 1; // Página actual
+    const limit = 6; // Número de posts por página
 
-    // Check for errors
-    if (posts.length === 0) {
-        res.status(404).json({ error: 'Posts not found' });
-        return;
+    try {
+        const skip = (page - 1) * limit; // Número de posts que se saltan
+
+        // Get all published posts
+        const posts = await Post.find({ published: true })
+            .sort({ created_at: -1 })
+            .populate('author')
+            .skip(skip) // Saltar posts
+            .limit(limit); // Limitar el número de posts
+
+        // Contar el número total de posts
+        const totalPosts = await Post.countDocuments({ published: true });
+
+        if (totalPosts === 0) {
+            res.status(404).json({ error: 'Posts not found' });
+            return;
+        }
+
+        res.json({ 
+            posts: posts,
+            currentPage: page,
+            totalPages: Math.ceil(totalPosts / limit),
+            totalPosts: totalPosts,
+            postsPerPage: limit,
+        });
+
+    } catch (error) {
+        res.status(500).json({ error: 'Error loading posts from the database' });
+        console.error("Error loading posts from the database", error);
     }
-
-    res.json(posts);
 });
 
 // Respond with a json list of all posts
 exports.getAllPosts = asyncHandler(async (req, res, next) => {
-    // Get all posts
-    const posts = await Post.find()
-        .sort({ created_at: -1 })
-        .populate('author');
+    const page = parseInt(req.query.page) || 1; // Página actual
+    const limit = parseInt(req.query.limit) || 6; // Número de posts por página
 
-    // Check for errors
-    if (posts.length === 0) {
-        res.status(404).json({ error: 'Posts not found' });
-        return;
+    try {
+        const skip = (page - 1) * limit; // Número de posts que se saltan
+
+        // Get all published posts
+        const posts = await Post.find()
+            .sort({ created_at: -1 })
+            .populate('author')
+            .skip(skip) // Saltar posts
+            .limit(limit); // Limitar el número de posts
+
+        // Contar el número total de posts
+        const totalPosts = await Post.countDocuments();
+
+        if (totalPosts === 0) {
+            res.status(404).json({ error: 'Posts not found' });
+            return;
+        }
+
+        res.json({ 
+            posts: posts,
+            currentPage: page,
+            totalPages: Math.ceil(totalPosts / limit),
+            totalPosts: totalPosts,
+            postsPerPage: limit,
+        });
+
+    } catch (error) {
+        res.status(500).json({ error: 'Error loading posts from the database' });
+        console.error("Error loading posts from the database", error);
     }
-
-    res.json(posts);
 });
 
 // Respond with a json object of a specific post
