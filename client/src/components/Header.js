@@ -37,7 +37,7 @@ function Header({ user, handleLogout }) {
         try {
             const response = await api.post('/api/posts/ai-generate');
             console.log(response.data);
-            navigate('/login'); // Redirect the user to the login page
+            navigate('/'); // Redirect the user to the login page
         }
         catch (error) {
             console.log('Error generating posts', error);
