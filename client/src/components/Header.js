@@ -6,6 +6,28 @@ import { Chip } from '@mui/material';
 import { Login, Logout, AccountCircle } from '@mui/icons-material';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import Hero from './Hero';
+import { createTheme } from '@mui/material/styles';
+
+let theme = createTheme();
+
+theme = createTheme(theme,{
+    palette: {
+        primary: {
+            main: '#fff',
+        },
+        secondary: {
+            main: '#ff5722',
+        },
+        grey: theme.palette.augmentColor({
+            color: {
+                main: '#e0e0e0',
+                contrastText: '#000',
+            },
+            name: 'grey',
+        })
+    },
+});
 
 function Header({ user, handleLogout }) {
 
@@ -24,47 +46,70 @@ function Header({ user, handleLogout }) {
 
     return (
         <header>
-            <div id='logo-container'>
-                <img src={logo} alt='logo' style={{ width: '50px', height: '50px' }} />
-                <h4><Link to={'/'} className='title'>DevNews en Español</Link></h4>
+            <div id="top-header">
+                <div id='logo-container'>
+                    <img src={logo} alt='logo' style={{ width: '50px', height: '50px' }} />
+                    <h4><Link to={'/'} className='title'>DevNews en Español</Link></h4>
+                </div>
+                <div id='nav-container'>
+                    {/* We will show the Log in and Sign up links only if the user is not logged in*/}
+                    {/* We will show the Log out link and a Welcome message only if the user is logged in*/}
+                    {user.isLoggedIn ? (
+                        <>
+                            <p className='welcome-message'>Welcome {user.name}!</p>
+                            {/* Display a 'New Post' button only if the user is an admin */}
+                            {user.type === 'admin' && <Button variant="contained" component={Link} to={'/new-post'}>New Post</Button>}
+                            {user.type === 'admin' && <Button variant="contained" onClick={handleGeneratePosts}>Generate Posts</Button>}
+                            <Chip
+                                label="Log out"
+                                onClick={handleLogout}
+                                icon={<Logout />}
+                                clickable
+                                sx={{ 
+                                    backgroundColor: 'white',
+                                    '&:hover': {
+                                        backgroundColor: theme.palette.grey.main,
+                                        color: 'black',
+                                    }
+                                }}
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <Chip
+                                label="Log in"
+                                component="a"
+                                href='/login'
+                                icon={<Login />}
+                                clickable
+                                sx={{ 
+                                    backgroundColor: 'white',
+                                    '&:hover': {
+                                        backgroundColor: theme.palette.grey.main,
+                                        color: 'black',
+                                    }
+                                }}
+                            />
+                            <Chip
+                                label="Sign up"
+                                component="a"
+                                href='/signup'
+                                icon={<AccountCircle />}
+                                clickable
+                                sx={{ 
+                                    backgroundColor: 'white',
+                                    '&:hover': {
+                                        backgroundColor: theme.palette.grey.main,
+                                        color: 'black',
+                                    }
+                                }}
+                            />
+                        </>
+                    )}
+                </div>
             </div>
-            <div id='nav-container'>
-                {/* We will show the Log in and Sign up links only if the user is not logged in*/}
-                {/* We will show the Log out link and a Welcome message only if the user is logged in*/}
-                {user.isLoggedIn ? (
-                    <>
-                        <p className='welcome-message'>Welcome {user.name}!</p>
-                        {/* Display a 'New Post' button only if the user is an admin */}
-                        {user.type === 'admin' && <Button variant="contained" component={Link} to={'/new-post'}>New Post</Button>}
-                        {user.type === 'admin' && <Button variant="contained" onClick={handleGeneratePosts}>Generate Posts</Button>}
-                        <Chip
-                            label="Log out"
-                            onClick={handleLogout}
-                            icon={<Logout />}
-                            variant='outlined'
-                            clickable
-                        />
-                    </>
-                ) : (
-                    <>
-                        <Chip
-                            label="Log in"
-                            component="a"
-                            href='/login'
-                            icon={<Login />}
-                            variant='outlined'
-                            clickable
-                        />
-                        <Chip
-                            label="Sign up"
-                            component="a"
-                            href='/signup'
-                            icon={<AccountCircle />}
-                            variant='outlined'
-                            clickable
-                        />
-                    </>
-                )}
+            <div id='bottom-header'>
+                <Hero />
             </div>
         </header>
     );

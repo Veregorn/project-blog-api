@@ -1,6 +1,12 @@
 .main {
     display: flex;
-    align-items: center;
+    flex: 1;
+}
+
+.main h2 {
+    font-size: 3.5rem;
+    color: #3e51eb;
+    font-weight: 600;
 }
 
 .main a {

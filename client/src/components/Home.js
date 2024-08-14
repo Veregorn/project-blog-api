@@ -7,6 +7,27 @@ import Typography from '@mui/material/Typography';
 import decodeImageURL from '../services/decodeImageURL';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import Pagination from '@mui/material/Pagination';
+import { createTheme } from '@mui/material/styles';
+
+let theme = createTheme();
+
+theme = createTheme(theme,{
+    palette: {
+        primary: {
+            main: '#fff',
+        },
+        secondary: {
+            main: '#ff5722',
+        },
+        grey: theme.palette.augmentColor({
+            color: {
+                main: '#e0e0e0',
+                contrastText: '#000',
+            },
+            name: 'grey',
+        })
+    },
+});
 
 
 function Home({ user }) {
@@ -66,11 +87,11 @@ function Home({ user }) {
 
     return (
         <div className='main'>
-            <h2>Posts</h2>
+            <h2>Últimos Artículos</h2>
             <Grid container spacing={8}>
                 {posts.length > 0 && posts.map((post) => (
                     <Grid item xs={12} sm={6} md={6} lg={4} key={post._id}>
-                        <Card key={post._id} className='card'>
+                        <Card key={post._id} className='card' sx={{ backgroundColor: '#efebe9' }}>
                             <>
                                 <CardMedia
                                     component='img'
@@ -79,12 +100,12 @@ function Home({ user }) {
                                     alt={post.title}
                                 />
                                 <CardContent className='card-content'>
-                                    <Typography sx={{ fontSize: 18, textOverflow: 'ellipsis' }} component='div'>
+                                    <Typography sx={{ fontSize: 18 }} component='div'>
                                         {post.title}
                                     </Typography>
                                 </CardContent>
                                 <CardActions className='card-actions'>
-                                    <Button size='small' component={Link} to={`/post/${post._id}`}>Read now</Button>
+                                    <Button size='small' component={Link} to={`/post/${post._id}`} sx={{ color: theme.palette.grey.main }}>Leer ahora</Button>
                                     {(user.isLoggedIn && user.type === 'admin' && !post.published) &&
                                         <Chip label='Unpublished' variant='outlined' color='primary' />
                                     }
@@ -96,11 +117,11 @@ function Home({ user }) {
                 {posts.length === 0 && <h4>No posts found</h4>}
             </Grid>
             <Pagination count={totalPages} color='primary' defaultPage={currentPage} onChange={handlePageChange} sx={{ mt: 2, textAlign: 'center' }}/>
-            {comments.length > 0 && <h2>Last Comments</h2>}
+            {comments.length > 0 && <h2>Últimos Comentarios</h2>}
             <Grid container spacing={8}>
                 {comments.map((comment) => (
                     <Grid item xs={12} sm={6} md={6} lg={4} key={comment._id} sx={{ pb: 10 }}>
-                        <Card key={comment._id}>
+                        <Card key={comment._id} sx={{ minWidth: '250px', minHeight: '250px' }}>
                             <CardContent>
                                 <Typography variant='subtitle2'>{comment.user.name}</Typography>
                                 <Typography variant='body2'> in </Typography>

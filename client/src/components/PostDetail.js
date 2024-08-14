@@ -166,10 +166,10 @@ function PostDetail({ user }) {
             {comments.length > 0 ? (
                 <>
                     <Typography variant='h2' sx={{ mt: 2 }}>Comments</Typography>
-                    <Grid container spacing={8}>
+                    <Grid container spacing={8} sx={{ pb: '6' }}>
                         {comments.map((comment) => (
-                            <Grid item xs={12} sm={6} md={6} lg={4} key={comment._id}>
-                                <Card key={comment._id}>
+                            <Grid item xs={12} sm={6} md={6} lg={4} key={comment._id} sx={{ pb: '10' }}>
+                                <Card key={comment._id} sx={{ minWidth: '250px', pb: '3' }}>
                                     <CardContent>
                                         <Typography variant='subtitle2'>{comment.user.name}</Typography>
                                         <Divider flexItem sx={{ mb: 2 }}/>

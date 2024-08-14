@@ -1,19 +1,19 @@
 <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
   <!-- Outer Circle -->
-  <circle cx="50" cy="50" r="45" stroke="black" stroke-width="3" fill="none"/>
+  <circle cx="50" cy="50" r="45" stroke="white" stroke-width="3" fill="none"/>
 
   <!-- Inner Geometric Pattern -->
-  <g fill="black">
-    <rect x="30" y="30" width="10" height="40" />
-    <rect x="60" y="30" width="10" height="40" />
-    <rect x="30" y="30" width="40" height="10" />
-    <rect x="30" y="60" width="40" height="10" />
+  <g fill="white">
+    <rect x="30" y="30" width="5" height="40" />
+    <rect x="65" y="30" width="5" height="40" />
+    <rect x="30" y="30" width="40" height="5" />
+    <rect x="30" y="65" width="40" height="5" />
   </g>
 
   <!-- Central Element -->
-  <circle cx="50" cy="50" r="5" fill="black"/>
+  <circle cx="50" cy="50" r="5" fill="white"/>
   
   <!-- Diagonal Lines -->
-  <line x1="30" y1="30" x2="70" y2="70" stroke="black" stroke-width="3"/>
-  <line x1="70" y1="30" x2="30" y2="70" stroke="black" stroke-width="3"/>
+  <line x1="30" y1="30" x2="70" y2="70" stroke="white" stroke-width="3"/>
+  <line x1="70" y1="30" x2="30" y2="70" stroke="white" stroke-width="3"/>
 </svg>

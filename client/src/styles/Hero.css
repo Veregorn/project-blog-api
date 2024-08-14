@@ -1,0 +1,46 @@
+#hero {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    min-height: 400px;
+}
+
+#hero-text {
+    flex: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    align-items: right;
+    text-wrap: pretty;
+    padding-left: 2rem;
+}
+
+#hero-text h2 {
+    font-size: 1.5rem;
+    color: #fff;
+    text-align: left;
+    font-weight: 300;
+}
+
+#hero-image {
+    flex: 50%;
+}
+
+#devto-screenshot {
+    width: 100%;
+    object-fit: cover;
+}
+
+/* Let's do that when the screen is small #hero flex-direction would be column */
+@media (max-width: 1200px) {
+    #hero {
+        flex-direction: column;
+    }
+    #hero-text {
+        padding: 2rem 6rem;
+    }
+
+    #hero-text h2 {
+        text-align: center;
+    }
+}
