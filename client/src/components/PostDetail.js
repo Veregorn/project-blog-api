@@ -125,7 +125,7 @@ function PostDetail({ user }) {
                 fontSize={60}
                 marginTop={10}
             >{post.title}</Typography>
-            {post.image_url && <img className='post-image' src={decodeImageURL(post.image_url)} alt={post.title} />}
+            {post.image_url ? <img className='post-image' src={decodeImageURL(post.image_url)} alt={post.title} /> : <img className='post-image' src='/devnews-sn-logo.jpg' alt={post.title} />}
             {/* Link to the source of the post */}
             {post.source && <Typography variant='subtitle2' color={'#777'}>Post original: <a href={post.source} target='_blank' rel='noreferrer'>{post.source}</a></Typography>}
             {/* <p className='post-detail-content'>{post.content}</p> */}

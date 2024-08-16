@@ -96,7 +96,7 @@ function Home({ user }) {
                                 <CardMedia
                                     component='img'
                                     sx= {{height: '200px'}}
-                                    image={decodeImageURL(post.image_url)}
+                                    image={post.image_url ? decodeImageURL(post.image_url) : '/devnews-sn-logo.jpg'}
                                     alt={post.title}
                                 />
                                 <CardContent className='card-content'>
